@@ -6,6 +6,6 @@ Repositorio del proyecto final del Laboratorio de Computación Gráfica e Intera
 ## Autores
 * Brito Segura Angel
 * Hernández Torres Agustín de Jesús
-* Huarte MNolasco Mario
+* Huarte Nolasco Mario
 
 ### Facultad de Ingeniería, Semestre 2021-2
