@@ -1,7 +1,8 @@
-# Proyecto Final Computación Gráfica
+# Proyecto Final Computación Gráfica e Interacción Humano-Computadora
+Ambiente virtual interactivo de zona abierta (exterior) representando a Marte con personajes ficticios: Wall-E, Eva, Fin y Stormtroopers
 
 ## Descripción 
-Repositorio del proyecto final del Laboratorio de Computación Gráfica e Interacción Humano-Computadora
+Repositorio del proyecto final del Laboratorio (grupo 1) y la Teoría (grupo 3) de la materia
 
 ## Autores
 * Brito Segura Angel
