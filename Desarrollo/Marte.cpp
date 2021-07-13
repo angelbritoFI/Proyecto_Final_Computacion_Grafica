@@ -52,6 +52,16 @@ Texture pisoTexture;
 //Personajes
 Model Avatar_M; //Wall-E
 Model Eva_M;
+/////////////////////////
+Model StarFighter_M;
+Model SpeederBike_M;
+Model FinnJake_M;
+Model Basura1_M;
+Model Basura2_M;
+Model Basura3_M;
+Model DeathStar_M;
+Model Luna_M;
+Model Sol_M;
 
 Skybox skybox;
 
@@ -263,7 +273,7 @@ int main() {
 	CrearCubo();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 5.0f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 1.0f, 0.5f);
 
 	//Piso
 	plainTexture = Texture("Textures/plain.png");
@@ -276,6 +286,35 @@ int main() {
 
 	Eva_M = Model();
 	Eva_M.LoadModel("Models/EVA.obj");
+
+	///////////////////////////////////////
+
+	StarFighter_M = Model();
+	StarFighter_M.LoadModel("Models/StarFighter.obj");
+
+	SpeederBike_M = Model();
+	SpeederBike_M.LoadModel("Models/SpeederBike.obj");
+
+	FinnJake_M = Model();
+	FinnJake_M.LoadModel("Models/Finn-Jake.obj");
+
+	Basura1_M = Model();
+	Basura1_M.LoadModel("Models/CuboBasura1.obj");
+
+	Basura2_M = Model();
+	Basura2_M.LoadModel("Models/CuboBasura2.obj");
+
+	Basura3_M = Model();
+	Basura3_M.LoadModel("Models/CuboBasura3.obj");
+
+	DeathStar_M = Model();
+	DeathStar_M.LoadModel("Models/DeathStar.obj");
+
+	Luna_M = Model();
+	Luna_M.LoadModel("Models/Luna.obj");
+
+	Sol_M = Model();
+	Sol_M.LoadModel("Models/Sol.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -411,6 +450,80 @@ int main() {
 		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Eva_M.RenderModel();
+
+		////////////////////////////////////////////////////////
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 50.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		StarFighter_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-45.0f, 50.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		SpeederBike_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, -1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		FinnJake_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(35.0f, 4.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		Basura1_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(45.0f, 4.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		Basura2_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(55.0f, 4.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		Basura3_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(85.0f, 50.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		DeathStar_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(200.0f, 100.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		Luna_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-200.0f, 100.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Dado_M.RenderModel();
+		Sol_M.RenderModel();
 		
 		glUseProgram(0);
 
