@@ -1,0 +1,35 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl Barc_Speeder_Base
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.486897 0.486897 0.486897
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\agust\\Documents\\Universidad\\8vo Semestre\\Lab. Computación Gráfica\\Proyecto_Final_Computacion_Grafica\\star-wars-barc-speeder-bike\\textures\\Barc_Speeder_Texture_1.png
+
+newmtl Barc_Speeder_Base_Red
+Ns 38.148795
+Ka 1.000000 1.000000 1.000000
+Kd 0.486897 0.486897 0.486897
+Ks 0.470588 0.470588 0.470588
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\agust\\Documents\\Universidad\\8vo Semestre\\Lab. Computación Gráfica\\Proyecto_Final_Computacion_Grafica\\star-wars-barc-speeder-bike\\textures\\Base_Texture_Red_Baked.png
+
+newmtl Barc_Speeder_Texture_2
+Ns 38.148795
+Ka 1.000000 1.000000 1.000000
+Kd 0.486897 0.486897 0.486897
+Ks 0.470588 0.470588 0.470588
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\agust\\Documents\\Universidad\\8vo Semestre\\Lab. Computación Gráfica\\Proyecto_Final_Computacion_Grafica\\star-wars-barc-speeder-bike\\textures\\Barc_Speeder_Texture_2.png
