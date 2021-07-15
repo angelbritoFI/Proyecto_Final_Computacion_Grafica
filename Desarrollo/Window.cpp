@@ -22,6 +22,8 @@ Window::Window(GLint windowWidth, GLint windowHeight) {
 	width = windowWidth;
 	height = windowHeight;
 	cambioColor = false; //Color original
+	movimientoAvatar[0] = 0.0f; // X
+	movimientoAvatar[1] = 0.0f; // Z
 	for (size_t i = 0; i < 1024; i++) {
 		keys[i] = 0;
 	}
@@ -107,6 +109,20 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_C) {
 		theWindow->cambioColor = true;
 	}
+
+	//Mover al avatar con las flechas
+	if (key == GLFW_KEY_UP) {
+		theWindow->movimientoAvatar[0] -= 1.0; // X--
+	}
+	if (key == GLFW_KEY_DOWN) {
+		theWindow->movimientoAvatar[0] += 1.0; // X++
+	}
+	if (key == GLFW_KEY_RIGHT) {
+		theWindow->movimientoAvatar[1] -= 1.0; // Z--
+	}
+	if (key == GLFW_KEY_LEFT) {
+		theWindow->movimientoAvatar[1] += 1.0; // Z++
+	}	
 
 	if (key >= 0 && key < 1024)	{
 		if (action == GLFW_PRESS)

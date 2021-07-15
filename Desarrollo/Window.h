@@ -31,6 +31,14 @@ class Window {
 		bool getCambioColor() { 
 			return cambioColor;
 		}
+
+		//Métodos públicos para mover al avatar
+		GLfloat getMovAvatarX() {
+			return movimientoAvatar[0]; // X
+		}
+		GLfloat getMovAvatarZ() {
+			return movimientoAvatar[1]; // Z
+		}
 				
 		bool getShouldClose() {
 			return  glfwWindowShouldClose(mainWindow);
@@ -54,6 +62,7 @@ class Window {
 		GLfloat xChange;
 		GLfloat yChange;
 		bool cambioColor; //Control del color
+		GLfloat movimientoAvatar[1]; //Variable float para el movimiento de Wall-E
 		bool mouseFirstMoved;
 		static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 		static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);

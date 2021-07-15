@@ -54,9 +54,12 @@ Texture pisoTexture;
 Model Avatar_M; 
 Model BrazoD_M;
 Model BrazoI_M;
+Model PieD_M;
+Model PieI_M;
 
 Model Eva_M;
 Model FinnJake_M;
+Model Clon_M;
 
 //Naves
 Model InterceptorJedi_M;
@@ -299,16 +302,22 @@ int main() {
 
 	//Wall-E
 	Avatar_M = Model();
-	Avatar_M.LoadModel("Models/Wall-E-Sin-Brazos.obj");
-	BrazoD_M = Model();
-	BrazoD_M.LoadModel("Models/Brazo-Derecho-Frente.obj");
+	Avatar_M.LoadModel("Models/Wall-E.obj");
 	BrazoI_M = Model();
-	BrazoI_M.LoadModel("Models/Brazo-Izquierdo-Frente.obj");
+	BrazoI_M.LoadModel("Models/Brazo-Derecho-Frente.obj");
+	BrazoD_M = Model();
+	BrazoD_M.LoadModel("Models/Brazo-Izquierdo-Frente.obj");
+	PieD_M = Model();
+	PieD_M.LoadModel("Models/Pie-Derecho.obj");
+	PieI_M = Model();
+	PieI_M.LoadModel("Models/Pie-Izquierdo.obj");
 
-	//Eva
 	Eva_M = Model();
 	Eva_M.LoadModel("Models/EVA.obj");
 
+	Clon_M = Model();
+	Clon_M.LoadModel("Models/Stormtrooper.obj");
+	
 	InterceptorJedi_M = Model();
 	InterceptorJedi_M.LoadModel("Models/InterceptorJedi.fbx");
 
@@ -426,13 +435,13 @@ int main() {
 
 		// ------------------------------------------ CAMBIO DE SKYBOX ------------------------------------------
 		// skybox de día
-		if (tmp_skybox <= 5.0f && !skyboxNoche)
+		if (tmp_skybox <= 15.0f && !skyboxNoche)
 		{
 			tmp_skybox += tiempo_offset * deltaTime;
 			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
 			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
-			if (tmp_skybox >= 4.99f)
+			if (tmp_skybox >= 14.99f)
 				skyboxNoche = true;
 		}
 		// Proyección de skybox de noche
@@ -498,7 +507,7 @@ int main() {
 		//Wall-E
 		glm::mat4 modelaux(1.0);
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), -1.0f, 10.0f + mainWindow.getMovAvatarZ()));
 		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -506,15 +515,29 @@ int main() {
 
 		//Brazo derecho Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -24.5f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 4.8f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BrazoD_M.RenderModel();
 
 		//Brazo izquierdo Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 17.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BrazoI_M.RenderModel();
+
+		//Pie derecho Wall-E
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
+		model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PieD_M.RenderModel();
+
+		//Pie izquierdo Wall-E
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.5f));
+		model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PieI_M.RenderModel();
 
 		//Eva
 		model = glm::mat4(1.0);
@@ -536,6 +559,13 @@ int main() {
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SpeederBike_M.RenderModel();
+
+		// Stormtrooper
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, -1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Clon_M.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(25.0f, -1.0f, 0.0f));

@@ -4,6 +4,7 @@
 
 #Archivos de Blender
 *.blend
+*.blend1
 
 # Archivos específicos de cada usuario
 *.suo
