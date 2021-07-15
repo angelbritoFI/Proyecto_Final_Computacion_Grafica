@@ -308,9 +308,9 @@ int main() {
 	BrazoD_M = Model();
 	BrazoD_M.LoadModel("Models/Brazo-Izquierdo-Frente.obj");
 	PieD_M = Model();
-	PieD_M.LoadModel("Models/Pie-Derecho.obj");
+	PieD_M.LoadModel("Models/Pie-Derecho.fbx");
 	PieI_M = Model();
-	PieI_M.LoadModel("Models/Pie-Izquierdo.obj");
+	PieI_M.LoadModel("Models/Pie-Izquierdo.fbx");
 
 	Eva_M = Model();
 	Eva_M.LoadModel("Models/EVA.obj");
@@ -541,14 +541,14 @@ int main() {
 
 		//Pie derecho Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
+		model = glm::translate(model, glm::vec3(3.6f, 2.4f, -6.5f));
 		model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PieD_M.RenderModel();
 
 		//Pie izquierdo Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.5f));
+		model = glm::translate(model, glm::vec3(3.6f, 2.4f, 6.5f));
 		model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PieI_M.RenderModel();
