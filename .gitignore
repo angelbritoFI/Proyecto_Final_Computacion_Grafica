@@ -69,3 +69,6 @@ orleans.codegen.cs
 # Manejadores de dependencia de paquetes
 .paket/paket.exe
 paket-files/
+
+# Carpeta para teoría
+Teoría/
