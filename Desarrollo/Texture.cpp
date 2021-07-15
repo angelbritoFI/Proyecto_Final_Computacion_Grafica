@@ -31,7 +31,7 @@ Texture::Texture(const char *FileLoc) {
 // Función que carga la textura por carga de modelo con base a la librería STB_image
 bool Texture::LoadTextureA() {
 	//para cambiar el origen a la esquina inferior izquierda como necesitamos
-	stbi_set_flip_vertically_on_load(false); // Se cambia a false para mostrar los modelos como se ven en Blender
+	stbi_set_flip_vertically_on_load(true); // Se cambia a false para mostrar los modelos como se ven en Blender
 	unsigned char *texData = stbi_load(fileLocation, &width, &height, &bitDepth,STBI_rgb_alpha); //el tipo unsigned char es para un array de bytes de la imagen, obtener datos de la imagen 
 	if (!texData) {
 		printf("No se encontró el archivo: %s", fileLocation);

@@ -11,7 +11,7 @@ void Model::LoadModel(const std::string & fileName)
 {
 	Assimp::Importer importer;//					Pasa de Polygons y Quads a triangulos, modifica orden para el origen, generar normales si el  objeto no tiene, trata vértices iguales como 1 solo
 	//const aiScene *scene=importer.ReadFile(fileName,aiProcess_Triangulate |aiProcess_FlipUVs|aiProcess_GenSmoothNormals|aiProcess_JoinIdenticalVertices); // Dos vértces con los mismo datos los pone en un solo vértice
-	const aiScene *scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs); 
+	const aiScene *scene = importer.ReadFile(fileName, aiProcess_Triangulate/* | aiProcess_FlipUVs*/); 
 	/*
 	// Para evitar problemas a la hora de importar modelos
 	const aiScene *scene = importer.ReadFile(fileName, aiProcess_Triangulate);
