@@ -68,9 +68,12 @@ Model SpeederBike_M;
 Model Basura1_M;
 Model Basura2_M;
 Model Basura3_M;
+
+//Cielo
 Model DeathStar_M;
 Model Luna_M;
 Model Sol_M;
+Model Estrellas_M;
 
 //skybox dia noche
 Skybox skybox;
@@ -345,6 +348,9 @@ int main() {
 	Sol_M = Model();
 	Sol_M.LoadModel("Models/Sol.obj");
 
+	Estrellas_M = Model();
+	Estrellas_M.LoadModel("Models/Estrellas.obj");
+
 	//Skybox dia
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -587,6 +593,33 @@ int main() {
 			model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			Luna_M.RenderModel();
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-100.0f, 200.0f, 100.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Estrellas_M.RenderModel();
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-200.0f, 200.0f, 100.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Estrellas_M.RenderModel();
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-200.0f, 200.0f, 100.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Estrellas_M.RenderModel();
+
+			model = glm::mat4(1.0);
+			model = glm::translate(model, glm::vec3(-200.0f, 200.0f, 100.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			model = glm::rotate(model, -270 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Estrellas_M.RenderModel();
 						
 			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
 			if (tmp_skybox <= 0.01f)
