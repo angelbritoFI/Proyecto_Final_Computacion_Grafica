@@ -99,6 +99,8 @@ GLfloat Window::getYChange() {
 	return theChange;
 }
 
+int contadorColor;
+
 void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode) {
 	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
@@ -106,8 +108,13 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 	
-	if (key == GLFW_KEY_C) {
+	if (key == GLFW_KEY_C && action == GLFW_PRESS && contadorColor % 2 == 0) {
 		theWindow->cambioColor = true;
+		contadorColor = contadorColor+1;
+	}
+	else if (key == GLFW_KEY_C && action == GLFW_PRESS && contadorColor % 2 != 0) {
+		theWindow->cambioColor = false;
+		contadorColor = contadorColor+1;
 	}
 
 	//Mover al avatar con las flechas
@@ -129,11 +136,13 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		{
 			theWindow->keys[key] = true;
 			printf("se presiono la tecla %d'\n", key);
+			//printf("contador %d \n", contadorColor);
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			theWindow->keys[key] = false;
 			printf("se solto la tecla %d'\n", key);
+			//printf("contador %d \n", contadorColor);
 		}
 	}
 }

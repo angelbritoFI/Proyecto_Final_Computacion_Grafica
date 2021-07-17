@@ -62,6 +62,7 @@ class Window {
 		GLfloat xChange;
 		GLfloat yChange;
 		bool cambioColor; //Control del color
+		//int contadorColor;
 		GLfloat movimientoAvatar[1]; //Variable float para el movimiento de Wall-E
 		bool mouseFirstMoved;
 		static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);

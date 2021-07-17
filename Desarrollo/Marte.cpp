@@ -320,7 +320,7 @@ int main() {
 
 	Clon_M = Model();
 	Clon_M.LoadModel("Models/Stormtrooper.obj");
-	
+
 	InterceptorJedi_M = Model();
 	InterceptorJedi_M.LoadModel("Models/InterceptorJedi.fbx");
 
@@ -380,10 +380,10 @@ int main() {
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, //de que color va ser la luz, color adicional que se le agregarán a los objetos
 		0.3f, 0.3f, //coeficiente ambiental que tan intenso es la luz y coeficiente difuso que tan claros son los objetos
 		0.0f, 0.0f, -1.0f); //vector de posisción en Z negativo para ver todo el rango
-	
+
 	//contador de luces puntuales (no se requiere si solo se tiene una sola luz)
 	unsigned int pointLightCount = 0;
-	
+
 	//Declaración de primer luz puntual
 	pointLights[0] = PointLight(0.0f, 0.0f, 1.0f, //color azul
 		0.0f, 1.0f, //coeficientes
@@ -521,26 +521,69 @@ int main() {
 		5.0f); //apertura (radio) del cono entre más grande será más grande la circunferencia
 	spotLightCount++;
 
-	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f, //color verde
-		1.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		1.0f, -5.0f, 0.0f, //ecuación de segundo grado
+	//Luz de Wall-E
+	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f,
+		-1.0f, 8.5f, 0.1f,
+		-0.05f, 0.0f, 0.0f, //ecuación de segundo grado
+		0.5f, 0.0f, 0.0f,
+		10.0f);
+	spotLightCount++;
+
+	//Luces RGB de Finn y Jake
+	spotLights[2] = SpotLight(1.0f, 0.0f, 0.0f, //color rojo
+		1.0f, 1.0f,
+		-60.0f, 0.0f, 40.0f,
+		0.0f, 1.0f, 0.0f, //ecuación de segundo grado
 		1.0f, 0.0f, 0.0f,
-		30.0f);
+		20.0f);
 	spotLightCount++;
-	
-	spotLights[2] = SpotLight(1.0f, 1.0f, 0.0f, //color amarillo
+
+	spotLights[3] = SpotLight(0.0f, 1.0f, 0.0f, //color verde
 		1.0f, 1.0f, //coeficientes
-		0.0f, 0.0f, 0.0f, //posición dentro del escenario
-		-1.0f, -1.0f, 0.0f, //ecuación de segundo grado
+		-60.0f, 0.0f, 40.0f, //posición dentro del escenario
+		1.0f, 1.0f, 0.0f, //ecuación de segundo grado
 		1.0f, 0.0f, 0.0f, //alcance
-		35.0f); // radio del cono
+		20.0f); // radio del cono
 	spotLightCount++;
-	
+
+	spotLights[4] = SpotLight(0.0f, 0.0f, 1.0f, //color azul
+		1.0f, 1.0f, //coeficientes
+		-60.0f, 0.0f, 40.0f, //posición dentro del escenario
+		-1.0f, 1.0f, 0.0f, //ecuación de segundo grado
+		1.0f, 0.0f, 0.0f, //alcance
+		20.0f); // radio del cono
+	spotLightCount++;
+
+	//Luces RGB del Stroomtroper
+	spotLights[5] = SpotLight(1.0f, 0.0f, 0.0f, //color rojo
+		1.0f, 1.0f,
+		-60.0f, 0.0f, -40.0f,
+		0.0f, 1.0f, 0.0f, //ecuación de segundo grado
+		1.0f, 0.0f, 0.0f,
+		20.0f);
+	spotLightCount++;
+
+	spotLights[6] = SpotLight(0.0f, 1.0f, 0.0f, //color verde
+		1.0f, 1.0f, //coeficientes
+		-60.0f, 0.0f, -40.0f, //posición dentro del escenario
+		1.0f, 1.0f, 0.0f, //ecuación de segundo grado
+		1.0f, 0.0f, 0.0f, //alcance
+		20.0f); // radio del cono
+	spotLightCount++;
+
+	spotLights[7] = SpotLight(0.0f, 0.0f, 1.0f, //color azul
+		1.0f, 1.0f, //coeficientes
+		-60.0f, 0.0f, -40.0f, //posición dentro del escenario
+		-1.0f, 1.0f, 0.0f, //ecuación de segundo grado
+		1.0f, 0.0f, 0.0f, //alcance
+		20.0f); // radio del cono
+	spotLightCount++;
+
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
-	
+
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
 
@@ -567,6 +610,7 @@ int main() {
 			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
 			shaderList[0].SetPointLights(pointLights, 0);
+			//shaderList[0].SetSpotLights(spotLights, 1);
 
 			glm::mat4 model(1.0);
 			model = glm::mat4(1.0);
@@ -586,6 +630,7 @@ int main() {
 			skyboxNight.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
 			shaderList[0].SetPointLights(pointLights, pointLightCount);
+			//shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 			glm::mat4 model(1.0);
 			model = glm::mat4(1.0);
@@ -593,7 +638,7 @@ int main() {
 			model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			Luna_M.RenderModel();
-										
+
 			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
 			if (tmp_skybox <= 0.01f)
 				skyboxNoche = false;
@@ -636,22 +681,46 @@ int main() {
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
+		//Show de luces RGB mediante teclado (Tecla C enciende y apaga)
 		if (mainWindow.getCambioColor()) {
-			spotLights[2].SetPos(glm::vec3(-1.4f, 2.0f, 9.0f));
-			spotLights[2].SetColor(glm::vec3(1.0f, 1.0f, 0.0f)); //Cambiar el color de la luz
-		} else { // No hay cambio de color
-			spotLights[2].SetPos(glm::vec3(-1.4f, 2.0f, 9.0f)); 
+			spotLights[1].SetColor(glm::vec3(1.0f, 1.0f, 1.0f)); //Cambiar el color de la luz
+
+			//spotLights[2].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f));
 			spotLights[2].SetColor(glm::vec3(1.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f));
+			spotLights[3].SetColor(glm::vec3(0.0f, 1.0f, 0.0f)); //Cambiar el color de la luz
+			//spotLights[4].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f));
+			spotLights[4].SetColor(glm::vec3(0.0f, 0.0f, 1.0f)); //Cambiar el color de la luz
+
+			spotLights[5].SetColor(glm::vec3(1.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			spotLights[6].SetColor(glm::vec3(0.0f, 1.0f, 0.0f)); //Cambiar el color de la luz
+			spotLights[7].SetColor(glm::vec3(0.0f, 0.0f, 1.0f)); //Cambiar el color de la luz
+		} else { // No hay cambio de color
+			//mainWindow.getCambioColor();
+			spotLights[1].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			
+			//spotLights[2].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f)); 
+			spotLights[2].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f));
+			spotLights[3].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			//spotLights[4].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f));
+			spotLights[4].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+
+			spotLights[5].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			spotLights[6].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+			spotLights[7].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
+
 		}
 
-		spotLights[1].SetPos(glm::vec3(-20.0f, 6.0f, -20.0));
+		//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0));
 
 		// ------------------------------------------ CARGA DE MODELOS ------------------------------------------
 		//Wall-E
 		glm::mat4 modelaux(1.0);
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), -1.0f, 10.0f + mainWindow.getMovAvatarZ()));
-		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), -1.0f, 0.0f + mainWindow.getMovAvatarZ()));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		//model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Avatar_M.RenderModel(); //Cuerpo de Wall-E		
@@ -684,7 +753,8 @@ int main() {
 
 		//Eva
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 25.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Eva_M.RenderModel();
@@ -699,44 +769,142 @@ int main() {
 
 		//Speeder Bike
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-45.0f, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::translate(model, glm::vec3(-70.0f, -5.0f, -60.0f));
+		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SpeederBike_M.RenderModel();
 
 		// Stormtrooper
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(-60.0f, -1.0f, -40.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Clon_M.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(25.0f, -1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-70.0f, -1.0f, 40.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		FinnJake_M.RenderModel();
 
+		////////////////////////////////////////////////////////////////////////////
+		//Lado derecho visto de frente de Wall-E
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(35.0f, 4.0f, 20.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::translate(model, glm::vec3(35.0f, 0.0f, 55.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Basura1_M.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(45.0f, 4.0f, 20.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::translate(model, glm::vec3(45.0f, 0.0f, 75.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Basura2_M.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(55.0f, 4.0f, 20.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::translate(model, glm::vec3(55.0f, 0.0f, 40.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Basura3_M.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(85.0f, 50.0f, 20.0f));
+		model = glm::translate(model, glm::vec3(5.0f, 0.0f, 55.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura1_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 0.0f, 75.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura2_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 0.0f, 40.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura3_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-25.0f, 0.0f, 55.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura1_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-15.0f, 0.0f, 75.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura2_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 40.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura3_M.RenderModel();
+
+		//Lado Izquierdo visto de frente de Wall-E
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(35.0f, 0.0f, -55.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura1_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(45.0f, 0.0f, -75.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura2_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(55.0f, 0.0f, -40.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura3_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(5.0f, 0.0f, -55.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura1_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 0.0f, -75.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura2_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 0.0f, -40.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura3_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-25.0f, 0.0f, -55.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura1_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-15.0f, 0.0f, -75.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura2_M.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, -40.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Basura3_M.RenderModel();
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(85.0f, 100.0f, 20.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DeathStar_M.RenderModel();
