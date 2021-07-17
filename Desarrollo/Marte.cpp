@@ -89,7 +89,7 @@ Material Material_opaco;
 //luz direccional (sol, ilumana todo el escenario por igual, debe de existir)
 DirectionalLight mainLight;
 //para declarar varias luces de tipo pointlight
-PointLight pointLights[MAX_POINT_LIGHTS]; //luz puntual (ilumna toda la esfera)
+PointLight pointLights[MAX_POINT_LIGHTS]; //luz puntual (ilumna el camino en la noche)
 SpotLight spotLights[MAX_SPOT_LIGHTS]; //solo una parte como cono
 
 GLfloat deltaTime = 0.0f;
@@ -385,26 +385,125 @@ int main() {
 		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
 	pointLightCount++;
 
-	pointLights[1];
-	pointLights[2];
-	pointLights[3];
-	pointLights[4];
-	pointLights[5];
-	pointLights[6];
-	pointLights[7];
-	pointLights[8];
-	pointLights[9];
-	pointLights[10];
-	pointLights[11];
-	pointLights[12];
-	pointLights[13];
-	pointLights[14];
-	pointLights[15];
-	pointLights[16];
-	pointLights[17];
-	pointLights[18];
-	pointLights[19];
-	pointLights[20];
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-100.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[2] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-100.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[3] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-80.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[4] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-80.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[5] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-60.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[6] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-60.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[7] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-40.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[8] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-40.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[9] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-20.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[10] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		-20.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[11] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		0.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[12] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		0.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[13] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		20.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[14] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		20.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[15] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		40.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[16] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		40.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[17] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		60.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[18] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		60.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[19] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		80.0f, 1.5f, 25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
+
+	pointLights[20] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
+		1.0f, 1.0f, //coeficientes
+		80.0f, 1.5f, -25.0f, //posición dentro del escenario
+		0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
+	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
 	//linterna (luz ligada a la cámara)
@@ -461,6 +560,7 @@ int main() {
 			tmp_skybox += tiempo_offset * deltaTime;
 			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
+			shaderList[0].SetPointLights(pointLights, 0);
 
 			glm::mat4 model(1.0);
 			model = glm::mat4(1.0);
@@ -468,126 +568,6 @@ int main() {
 			model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			Sol_M.RenderModel();
-
-			pointLights[1] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-				0.0f, 1.0f, //coeficientes
-				-50.0f, 1.5f, 25.0f, //posición dentro del escenario
-				0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			pointLightCount++;
-
-			pointLights[2] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-				0.0f, 1.0f, //coeficientes
-				-50.0f, 1.5f, -25.0f, //posición dentro del escenario
-				0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			pointLightCount++;
-
-			//pointLights[3] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-40.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[4] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-40.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[5] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-30.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[6] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-30.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[7] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-20.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[8] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-20.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[9] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-10.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[10] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	-10.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[11] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	0.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[12] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	0.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[13] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	10.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[14] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	10.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[15] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	20.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[16] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	20.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[17] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	30.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[18] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	30.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[19] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	40.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[20] = PointLight(0.0f, 0.0f, 0.0f, //sin color
-			//	0.0f, 1.0f, //coeficientes
-			//	40.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
 
 			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
 			if (tmp_skybox >= 14.99f)
@@ -599,6 +579,7 @@ int main() {
 			tmp_skybox -= tiempo_offset * deltaTime;
 			skyboxNight.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
+			shaderList[0].SetPointLights(pointLights, pointLightCount);
 
 			glm::mat4 model(1.0);
 			model = glm::mat4(1.0);
@@ -606,127 +587,7 @@ int main() {
 			model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			Luna_M.RenderModel();
-
-			pointLights[1] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-				0.0f, 1.0f, //coeficientes
-				-50.0f, 1.5f, 25.0f, //posición dentro del escenario
-				0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			pointLightCount++;
-
-			pointLights[2] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-				0.0f, 1.0f, //coeficientes
-				-50.0f, 1.5f, -25.0f, //posición dentro del escenario
-				0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			pointLightCount++;
-
-			//pointLights[3] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-40.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[4] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-40.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[5] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-30.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[6] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-30.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[7] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-20.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[8] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-20.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[9] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-10.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[10] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	-10.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[11] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	0.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[12] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	0.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[13] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	10.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[14] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	10.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[15] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	20.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[16] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	20.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[17] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	30.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[18] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	30.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[19] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	40.0f, 1.5f, 25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
-			//pointLights[20] = PointLight(1.0f, 1.0f, 1.0f, //color blanco
-			//	0.0f, 1.0f, //coeficientes
-			//	40.0f, 1.5f, -25.0f, //posición dentro del escenario
-			//	0.3f, 0.2f, 0.1f); //ecuación de segundo grado para la atenuación ax2 + bx + c
-			//pointLightCount++;
-
+						
 			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
 			if (tmp_skybox <= 0.01f)
 				skyboxNoche = false;
@@ -755,7 +616,7 @@ int main() {
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetPointLights(pointLights, pointLightCount);
+		//shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		
 		glm::mat4 model(1.0);
