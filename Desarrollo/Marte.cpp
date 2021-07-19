@@ -37,6 +37,26 @@
 #include "PointLight.h"
 #include "Material.h"
 
+#include <irrklang/irrKlang.h>
+
+// Also, we tell the compiler to use the namespaces 'irrklang'.
+// All classes and functions of irrKlang can be found in the namespace 'irrklang'.
+// If you want to use a class of the engine,
+// you'll have to type an irrklang:: before the name of the class.
+// For example, to use the ISoundEngine, write: irrklang::ISoundEngine. To avoid having
+// to put irrklang:: before of the name of every class, we tell the compiler that
+// we use that namespaces here.
+
+using namespace irrklang;
+
+
+// To be able to use the irrKlang.dll file, we need to link with the irrKlang.lib.
+// We could set this option in the project settings, but to make it easy we use
+// a pragma comment:
+
+#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
+
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
@@ -584,6 +604,16 @@ int main() {
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
 
+	// start the sound engine with default parameters
+	ISoundEngine* engine = createIrrKlangDevice();
+	if (!engine) {
+		printf("Could not startup engine\n");
+		return 0; // error starting up the engine
+	}
+
+	// play a single sound
+	engine->play2D("media/air.mp3");
+
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
 
@@ -947,11 +977,12 @@ int main() {
 		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Sol_M.RenderModel();*/
-		
+
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();
 	}
 
+	engine->drop(); // delete engine
 	return 0;
 }
