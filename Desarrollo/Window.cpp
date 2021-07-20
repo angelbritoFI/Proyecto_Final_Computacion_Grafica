@@ -118,12 +118,20 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 	//Mover al avatar con las flechas
-	if (key == GLFW_KEY_UP) {
+	if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] >= -5.0) {
 		theWindow->movimientoAvatar[0] -= 1.0; // X--
 	}
-	if (key == GLFW_KEY_DOWN) {
+	else if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] < -5.0) {
+		theWindow->movimientoAvatar[0] -= 0.0; // X--
+	}
+
+	if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] <= -1.0) {
 		theWindow->movimientoAvatar[0] += 1.0; // X++
 	}
+	else if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] > -1.0) {
+		theWindow->movimientoAvatar[0] += 0.0; // X--
+	}
+
 	if (key == GLFW_KEY_RIGHT) {
 		theWindow->movimientoAvatar[1] -= 1.0; // Z--
 	}

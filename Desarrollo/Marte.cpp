@@ -128,6 +128,12 @@ static const char* fShader = "shaders/shader_light.frag";
 //Variables auxiliares tiempo
 float tiempo_offset = 0.05;
 
+// Variables para Animación de Wall-E
+float posXrobot = 0.0f, posYrobot = 0.0f, posZrobot = 0.0f;
+
+float offset, rotaHeli = 0.0f, rota = 0.0f;
+int adelante = 1, arriba = 0, abajo = 0;
+
 //cálculo del promedio de las normales para sombreado de Phong
 void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
@@ -314,6 +320,7 @@ int main() {
 	CreateObjects();
 	CrearCubo();
 	CreateShaders();
+	printf("posXrobot: %f\n", posXrobot);
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 1.0f, 0.5f);
 
@@ -842,6 +849,8 @@ int main() {
 	// play a single sound
 	engine->play2D("media/air.mp3");
 
+	float offsetHeli = 0.03, offsetPos = 0.01f, giroHelice = 0.0f;
+
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
 
@@ -929,6 +938,7 @@ int main() {
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		
 		glm::mat4 model(1.0);
+		glm::mat4 modelaux(1.0);
 		
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
@@ -938,6 +948,8 @@ int main() {
 		//agregar material al plano de piso
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
+
+		//printf("Wall-E Brazo: %f\n", mainWindow.getMovAvatarX());
 
 		//Show de luces RGB mediante teclado (Tecla C enciende y apaga)
 		if (mainWindow.getCambioColor()) {
@@ -974,40 +986,103 @@ int main() {
 
 		// ------------------------------------------ CARGA DE MODELOS ------------------------------------------
 		//Wall-E
-		glm::mat4 modelaux(1.0);
+		//glm::mat4 modelaux(1.0);
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), -1.0f, 0.0f + mainWindow.getMovAvatarZ()));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		//model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		modelaux = model;
+		if (posXrobot <= 100.0f && posXrobot > -65.0f) {
+			//model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), -1.0f, 0.0f + mainWindow.getMovAvatarZ()));
+			modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
+			//modelaux = model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+			//model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+			//modelaux = model;
+		}
+		else if (posXrobot <= -65.0f && posXrobot > -66.0f) {
+			 if (posZrobot > -20.0f && adelante == 1) {
+				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
+				model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
+			 }
+			 if (posZrobot < 20.0f && adelante == 0) {
+				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
+				model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
+			 }
+		}
+
+		modelaux = model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Avatar_M.RenderModel(); //Cuerpo de Wall-E		
 
 		//Brazo derecho Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 4.8f));
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f, 4.8f));
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BrazoD_M.RenderModel();
 
 		//Brazo izquierdo Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -12.5f));
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f, -12.5f));
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BrazoI_M.RenderModel();
 
 		//Pie derecho Wall-E
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(3.6f, 2.4f, -6.5f));
-		model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PieD_M.RenderModel();
 
 		//Pie izquierdo Wall-E
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(3.6f, 2.4f, 6.5f));
-		model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PieI_M.RenderModel();
+
+		if (posXrobot <= 100.0f && posXrobot > -65.0f) {
+			posXrobot -= 0.01*deltaTime;
+			printf("Wall-E X: %f\n", posXrobot);
+			printf("Wall-E Z: %f\n", posZrobot);
+		}
+		else if (posXrobot <= -65.0f && posXrobot > -66.0f) {
+			if (posZrobot > -20.0f && adelante == 1) {
+				posZrobot -= 0.01*deltaTime;
+				//posXrobot += 0.009*deltaTime;
+				printf("Wall-E X: %f\n", posXrobot);
+				printf("Wall-E Z: %f\n", posZrobot);
+			}
+			else {
+				adelante = 0;
+				arriba = 1;
+			}
+
+			if (posZrobot < 20.0f && adelante == 0) {
+				posZrobot += 0.01*deltaTime;
+				//posXrobot += 0.009*deltaTime;
+				printf("Wall-E X: %f\n", posXrobot);
+				printf("Wall-E Z: %f\n", posZrobot);
+			}
+			else
+			{
+				adelante = 1;
+				abajo = 1;
+			}
+
+			if (!adelante && rotaHeli < 90) {
+				posZrobot += /*cos(200*offset*toRadians)*/ offsetPos * deltaTime;
+				rotaHeli += offsetHeli * deltaTime;
+				printf("grados: %f\n", rotaHeli);
+			}
+			if (adelante && rotaHeli > 180 && rotaHeli < 180) {
+				posZrobot -= offsetPos * deltaTime;
+				rotaHeli += offsetHeli * deltaTime;
+				printf("grados: %f\n", rotaHeli);
+			}
+
+			if (rotaHeli > 360) {
+				rotaHeli = 0;
+			}
+		}
+
 
 		//Eva
 		model = glm::mat4(1.0);
