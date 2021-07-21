@@ -24,6 +24,8 @@ Window::Window(GLint windowWidth, GLint windowHeight) {
 	cambioColor = false; //Color original
 	activaAnimacionWallE = false; //Activar animación Wall-E
 	reseteaAnimacionWallE = false; //Resetear animación Wall-E
+	activaAnimacionSpeeder = false; //Activar animación Speeder Bike
+	reseteaAnimacionSpeeder = false; //Resetear animación Speeder Bike
 	movimientoAvatar[0] = 0.0f; // X
 	movimientoAvatar[1] = 0.0f; // Z
 	for (size_t i = 0; i < 1024; i++) {
@@ -101,7 +103,7 @@ GLfloat Window::getYChange() {
 	return theChange;
 }
 
-int contadorColor, contadorAnimacionWallE, contadorResetWallE;
+int contadorColor, contadorAnimacionWallE, contadorResetWallE, contadorAnimacionSpeeder, contadorResetSpeeder;
 
 void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode) {
 	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
@@ -119,7 +121,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		contadorColor = contadorColor+1;
 	}
 
-	//Mover al avatar con las flechas
+	//Mover brazos del avatar con las flechas
 	if (key == GLFW_KEY_LEFT && theWindow->movimientoAvatar[0] >= -5.0) {
 		theWindow->movimientoAvatar[0] -= 1.0; // X--
 	}
@@ -131,7 +133,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->movimientoAvatar[0] += 1.0; // X++
 	}
 	else if (key == GLFW_KEY_RIGHT && theWindow->movimientoAvatar[0] > -1.0) {
-		theWindow->movimientoAvatar[0] += 0.0; // X--
+		theWindow->movimientoAvatar[0] += 0.0; // X++
 	}
 
 	if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] < -5.0 && theWindow->movimientoAvatar[1] >= -3.0) {
@@ -145,7 +147,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->movimientoAvatar[1] += 1.0; // Y++
 	}
 	else if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] < -5.0 && theWindow->movimientoAvatar[1] > -1.0) {
-		theWindow->movimientoAvatar[1] += 0.0; // Y--
+		theWindow->movimientoAvatar[1] += 0.0; // Y++
 	}
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS && contadorAnimacionWallE % 2 == 0) {
@@ -157,13 +159,26 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		contadorAnimacionWallE = contadorAnimacionWallE + 1;
 	}
 
+	if (key == GLFW_KEY_P && action == GLFW_PRESS && contadorAnimacionSpeeder % 2 == 0) {
+		theWindow->activaAnimacionSpeeder = true;
+		contadorAnimacionSpeeder = contadorAnimacionSpeeder + 1;
+	}
+	else if (key == GLFW_KEY_P && action == GLFW_PRESS && contadorAnimacionSpeeder % 2 != 0) {
+		theWindow->activaAnimacionSpeeder = false;
+		contadorAnimacionSpeeder = contadorAnimacionSpeeder + 1;
+	}
+
 	if (key == GLFW_KEY_R && action == GLFW_PRESS && contadorResetWallE % 2 == 0) {
 		theWindow->reseteaAnimacionWallE = true;
+		theWindow->reseteaAnimacionSpeeder = true;
 		contadorResetWallE = contadorResetWallE + 1;
+		contadorResetSpeeder = contadorResetSpeeder + 1;
 	}
 	else if (key == GLFW_KEY_R && action == GLFW_PRESS && contadorResetWallE % 2 != 0) {
 		theWindow->reseteaAnimacionWallE = false;
+		theWindow->reseteaAnimacionSpeeder = false;
 		contadorResetWallE = contadorResetWallE + 1;
+		contadorResetSpeeder = contadorResetSpeeder + 1;
 	}
 
 	if (key >= 0 && key < 1024)	{

@@ -129,10 +129,10 @@ static const char* fShader = "shaders/shader_light.frag";
 float tiempo_offset = 0.05;
 
 // Variables para Animación de Wall-E
-float posXrobot = 0.0f, posYrobot = 0.0f, posZrobot = 0.0f;
+float posXrobot = 0.0f, posYrobot = 0.0f, posZrobot = 0.0f, posXspeeder = 0.0f, posYspeeder = 0.0f, posZspeeder = 0.0f;
 
 float offset, rotaHeli = 0.0f, rota = 0.0f;
-int adelanteX = 1, adelanteZ = 1, arriba = 0, abajo = 0;
+int adelanteX = 1, adelanteY = 0, adelanteZ = 1, arriba = 0, abajo = 0;
 
 //cálculo del promedio de las normales para sombreado de Phong
 void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount,
@@ -320,7 +320,7 @@ int main() {
 	CreateObjects();
 	CrearCubo();
 	CreateShaders();
-	printf("posXrobot: %f\n", posXrobot);
+	//printf("posXrobot: %f\n", posXrobot);
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 1.0f, 0.5f);
 
@@ -380,22 +380,22 @@ int main() {
 
 	//Skybox dia
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	skyboxFaces.push_back("Textures/Skybox/marte-dia_lf.tga");
+	skyboxFaces.push_back("Textures/Skybox/marte-dia_rt.tga");
+	skyboxFaces.push_back("Textures/Skybox/marte-dia_dn.tga");
+	skyboxFaces.push_back("Textures/Skybox/marte-dia_up.tga");
+	skyboxFaces.push_back("Textures/Skybox/marte-dia_bk.tga");
+	skyboxFaces.push_back("Textures/Skybox/marte-dia_ft.tga");
 	skybox = Skybox(skyboxFaces);
 
 	//skybox noche
 	std::vector<std::string> skyboxFacesNight;
-	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_rt.tga");
-	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_lf.tga");
-	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_dn.tga");
-	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_up.tga");
-	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_bk.tga");
-	skyboxFacesNight.push_back("Textures/Skybox/cupertin-lake-night_ft.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/marte-noche_lf.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/marte-noche_rt.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/marte-noche_dn.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/marte-noche_up.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/marte-noche_bk.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/marte-noche_ft.tga");
 	skyboxNight = Skybox(skyboxFacesNight);
 
 	// Se declaran los materiales de iluminación
@@ -939,6 +939,7 @@ int main() {
 		
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
+		glm::mat4 modelaux2(1.0);
 		
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
@@ -949,7 +950,7 @@ int main() {
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-		printf("Wall-E Brazo: %f\n", mainWindow.getMovAvatarZ());
+		//printf("Wall-E Brazo: %f\n", mainWindow.getMovAvatarZ());
 
 		//Show de luces RGB mediante teclado (Tecla C enciende y apaga)
 		if (mainWindow.getCambioColor()) {
@@ -1019,34 +1020,6 @@ int main() {
 		modelaux = model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Avatar_M.RenderModel(); //Cuerpo de Wall-E		
-
-		//Brazo derecho Wall-E
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f + mainWindow.getMovAvatarZ(), 4.8f));
-		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		BrazoD_M.RenderModel();
-
-		//Brazo izquierdo Wall-E
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f + mainWindow.getMovAvatarZ(), -12.5f));
-		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		BrazoI_M.RenderModel();
-
-		//Pie derecho Wall-E
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(3.6f, 2.4f, -6.5f));
-		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		PieD_M.RenderModel();
-
-		//Pie izquierdo Wall-E
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(3.6f, 2.4f, 6.5f));
-		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		PieI_M.RenderModel();
 
 		if (mainWindow.activaAnimacionWallE == true) {
 
@@ -1126,6 +1099,34 @@ int main() {
 			spotLights[1].SetFlash(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot), glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
 
+		//Brazo derecho Wall-E
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f + mainWindow.getMovAvatarZ(), 4.8f));
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoD_M.RenderModel();
+
+		//Brazo izquierdo Wall-E
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f + mainWindow.getMovAvatarZ(), -12.5f));
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoI_M.RenderModel();
+
+		//Pie derecho Wall-E
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(3.6f, 2.4f, -6.5f));
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PieD_M.RenderModel();
+
+		//Pie izquierdo Wall-E
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(3.6f, 2.4f, 6.5f));
+		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() + mainWindow.getMovAvatarZ()) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PieI_M.RenderModel();
+
 		//Eva
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 25.0f));
@@ -1144,10 +1145,40 @@ int main() {
 
 		//Speeder Bike
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-70.0f, -5.0f, -60.0f));
+		if (posYspeeder > -10.0f && adelanteY == 1) {
+			model = glm::translate(model, glm::vec3(-70.0f, -5.0f + posYspeeder, -60.0f));
+		}
+		else if (posYspeeder < 50.0f && adelanteY == 0) {
+			model = glm::translate(model, glm::vec3(-70.0f, -5.0f + posYspeeder, -60.0f));
+		}
 		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SpeederBike_M.RenderModel();
+
+		if (mainWindow.activaAnimacionSpeeder == true) {
+
+			if (posYspeeder >= 0.0f && adelanteY == 0) {
+				posYspeeder -= 0.05*deltaTime;
+				printf("Speeder Bike: %f\n", posYspeeder);
+			}
+			else {
+				adelanteY = 1;
+			}
+
+			if (posYspeeder < 50.0f && adelanteY == 1) {
+				posYspeeder += 0.05*deltaTime;
+				printf("Speeder Bike: %f\n", posYspeeder);
+			}
+			else
+			{
+				adelanteY = 0;
+			}
+		}
+		else if (mainWindow.reseteaAnimacionSpeeder == true) {
+			/*posXspeeder = 0.0f;
+			posZspeeder = 0.0f;*/
+			posYspeeder = 0.0f;
+		}
 
 		// Stormtrooper
 		model = glm::mat4(1.0);

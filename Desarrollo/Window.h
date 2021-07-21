@@ -52,6 +52,9 @@ class Window {
 
 		bool activaAnimacionWallE;
 		bool reseteaAnimacionWallE;
+
+		bool activaAnimacionSpeeder;
+		bool reseteaAnimacionSpeeder;
 	
 		~Window();
 	private: 
