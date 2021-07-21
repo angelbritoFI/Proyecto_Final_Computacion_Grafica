@@ -1181,8 +1181,7 @@ int main() {
 			}
 		}
 		else if (mainWindow.reseteaAnimacionSpeeder == true) {
-			/*posXspeeder = 0.0f;
-			posZspeeder = 0.0f;*/
+			posZspeeder = 0.0f;
 			posYspeeder = 0.0f;
 		}
 
