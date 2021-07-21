@@ -22,6 +22,8 @@ Window::Window(GLint windowWidth, GLint windowHeight) {
 	width = windowWidth;
 	height = windowHeight;
 	cambioColor = false; //Color original
+	activaAnimacionWallE = false; //Activar animación Wall-E
+	reseteaAnimacionWallE = false; //Resetear animación Wall-E
 	movimientoAvatar[0] = 0.0f; // X
 	movimientoAvatar[1] = 0.0f; // Z
 	for (size_t i = 0; i < 1024; i++) {
@@ -99,7 +101,7 @@ GLfloat Window::getYChange() {
 	return theChange;
 }
 
-int contadorColor;
+int contadorColor, contadorAnimacionWallE, contadorResetWallE;
 
 void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode) {
 	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
@@ -118,26 +120,51 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 	//Mover al avatar con las flechas
-	if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] >= -5.0) {
+	if (key == GLFW_KEY_LEFT && theWindow->movimientoAvatar[0] >= -5.0) {
 		theWindow->movimientoAvatar[0] -= 1.0; // X--
 	}
-	else if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] < -5.0) {
+	else if (key == GLFW_KEY_LEFT && theWindow->movimientoAvatar[0] < -5.0) {
 		theWindow->movimientoAvatar[0] -= 0.0; // X--
 	}
 
-	if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] <= -1.0) {
+	if (key == GLFW_KEY_RIGHT && theWindow->movimientoAvatar[0] <= -1.0) {
 		theWindow->movimientoAvatar[0] += 1.0; // X++
 	}
-	else if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] > -1.0) {
+	else if (key == GLFW_KEY_RIGHT && theWindow->movimientoAvatar[0] > -1.0) {
 		theWindow->movimientoAvatar[0] += 0.0; // X--
 	}
 
-	if (key == GLFW_KEY_RIGHT) {
-		theWindow->movimientoAvatar[1] -= 1.0; // Z--
+	if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] < -5.0 && theWindow->movimientoAvatar[1] >= -3.0) {
+		theWindow->movimientoAvatar[1] -= 1.0; // Y--
 	}
-	if (key == GLFW_KEY_LEFT) {
-		theWindow->movimientoAvatar[1] += 1.0; // Z++
-	}	
+	else if (key == GLFW_KEY_DOWN && theWindow->movimientoAvatar[0] < -5.0 && theWindow->movimientoAvatar[1] < -3.0) {
+		theWindow->movimientoAvatar[1] -= 0.0; // Y--
+	}
+
+	if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] < -5.0 && theWindow->movimientoAvatar[1] <= -1.0) {
+		theWindow->movimientoAvatar[1] += 1.0; // Y++
+	}
+	else if (key == GLFW_KEY_UP && theWindow->movimientoAvatar[0] < -5.0 && theWindow->movimientoAvatar[1] > -1.0) {
+		theWindow->movimientoAvatar[1] += 0.0; // Y--
+	}
+
+	if (key == GLFW_KEY_I && action == GLFW_PRESS && contadorAnimacionWallE % 2 == 0) {
+		theWindow->activaAnimacionWallE = true;
+		contadorAnimacionWallE = contadorAnimacionWallE + 1;
+	}
+	else if (key == GLFW_KEY_I && action == GLFW_PRESS && contadorAnimacionWallE % 2 != 0) {
+		theWindow->activaAnimacionWallE = false;
+		contadorAnimacionWallE = contadorAnimacionWallE + 1;
+	}
+
+	if (key == GLFW_KEY_R && action == GLFW_PRESS && contadorResetWallE % 2 == 0) {
+		theWindow->reseteaAnimacionWallE = true;
+		contadorResetWallE = contadorResetWallE + 1;
+	}
+	else if (key == GLFW_KEY_R && action == GLFW_PRESS && contadorResetWallE % 2 != 0) {
+		theWindow->reseteaAnimacionWallE = false;
+		contadorResetWallE = contadorResetWallE + 1;
+	}
 
 	if (key >= 0 && key < 1024)	{
 		if (action == GLFW_PRESS)

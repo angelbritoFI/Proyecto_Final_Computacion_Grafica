@@ -49,6 +49,9 @@ class Window {
 		void swapBuffers() { 
 			return glfwSwapBuffers(mainWindow); 
 		}
+
+		bool activaAnimacionWallE;
+		bool reseteaAnimacionWallE;
 	
 		~Window();
 	private: 

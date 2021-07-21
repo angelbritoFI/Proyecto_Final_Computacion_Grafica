@@ -132,7 +132,7 @@ float tiempo_offset = 0.05;
 float posXrobot = 0.0f, posYrobot = 0.0f, posZrobot = 0.0f;
 
 float offset, rotaHeli = 0.0f, rota = 0.0f;
-int adelante = 1, arriba = 0, abajo = 0;
+int adelanteX = 1, adelanteZ = 1, arriba = 0, abajo = 0;
 
 //cálculo del promedio de las normales para sombreado de Phong
 void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount,
@@ -949,7 +949,7 @@ int main() {
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-		//printf("Wall-E Brazo: %f\n", mainWindow.getMovAvatarX());
+		printf("Wall-E Brazo: %f\n", mainWindow.getMovAvatarZ());
 
 		//Show de luces RGB mediante teclado (Tecla C enciende y apaga)
 		if (mainWindow.getCambioColor()) {
@@ -982,6 +982,8 @@ int main() {
 
 		}
 
+		//spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
+
 		//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0));
 
 		// ------------------------------------------ CARGA DE MODELOS ------------------------------------------
@@ -996,15 +998,23 @@ int main() {
 			//modelaux = model;
 		}
 		else if (posXrobot <= -65.0f && posXrobot > -66.0f) {
-			 if (posZrobot > -20.0f && adelante == 1) {
+			 if (posZrobot > -20.0f && adelanteZ == 1 /*&& arriba == 0*/) {
 				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
 				model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
 			 }
-			 if (posZrobot < 20.0f && adelante == 0) {
+			 if (posZrobot < 20.0f && adelanteZ == 0 /*&& abajo == 0*/) {
 				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
 				model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
 			 }
+			 //if (posZrobot <= 21.0f && posZrobot > 0.0f && adelanteZ == 1) {
+				//modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
+				//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
+			 //}
 		}
+		//else if (posXrobot >= -66.0f && posXrobot < 10.0f /*&& arriba == 1 && abajo == 1*/ && posZrobot <= 0.0f /*&& adelanteX == 0*/) {
+		//	modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
+		//	model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
+		//}
 
 		modelaux = model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1012,14 +1022,14 @@ int main() {
 
 		//Brazo derecho Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f, 4.8f));
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f + mainWindow.getMovAvatarZ(), 4.8f));
 		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BrazoD_M.RenderModel();
 
 		//Brazo izquierdo Wall-E
 		model = modelaux;
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f, -12.5f));
+		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getMovAvatarX(), 0.0f + mainWindow.getMovAvatarZ(), -12.5f));
 		//model = glm::rotate(model, 10 * (mainWindow.getMovAvatarX() /*+ mainWindow.getMovAvatarZ()*/) * toRadians, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotación de sus engranes
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		BrazoI_M.RenderModel();
@@ -1038,51 +1048,83 @@ int main() {
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PieI_M.RenderModel();
 
-		if (posXrobot <= 100.0f && posXrobot > -65.0f) {
-			posXrobot -= 0.01*deltaTime;
-			printf("Wall-E X: %f\n", posXrobot);
-			printf("Wall-E Z: %f\n", posZrobot);
-		}
-		else if (posXrobot <= -65.0f && posXrobot > -66.0f) {
-			if (posZrobot > -20.0f && adelante == 1) {
-				posZrobot -= 0.01*deltaTime;
-				//posXrobot += 0.009*deltaTime;
+		if (mainWindow.activaAnimacionWallE == true) {
+
+			if (posXrobot <= 100.0f && posXrobot > -65.0f && adelanteX == 1) {
+				posXrobot -= 0.01*deltaTime;
 				printf("Wall-E X: %f\n", posXrobot);
 				printf("Wall-E Z: %f\n", posZrobot);
+				spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
 			}
-			else {
-				adelante = 0;
-				arriba = 1;
-			}
+			else if (posXrobot <= -65.0f && posXrobot > -66.0f && adelanteX == 1) {
+				if (posZrobot > -20.0f && adelanteZ == 1/* && arriba == 0*/) {
+					posZrobot -= 0.01*deltaTime;
+					//posXrobot += 0.009*deltaTime;
+					spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
+					spotLights[1].SetFlash(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot), glm::vec3(0.0f, 0.0f, -1.0f));
+					printf("Wall-E X: %f\n", posXrobot);
+					printf("Wall-E Z: %f\n", posZrobot);
+				}
+				else {
+					adelanteZ = 0;
+					arriba = 1;
+				}
 
-			if (posZrobot < 20.0f && adelante == 0) {
-				posZrobot += 0.01*deltaTime;
-				//posXrobot += 0.009*deltaTime;
-				printf("Wall-E X: %f\n", posXrobot);
-				printf("Wall-E Z: %f\n", posZrobot);
-			}
-			else
-			{
-				adelante = 1;
-				abajo = 1;
-			}
+				if (posZrobot < 20.0f && adelanteZ == 0 /*&& abajo == 0*/) {
+					posZrobot += 0.01*deltaTime;
+					//posXrobot += 0.009*deltaTime;
+					spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
+					spotLights[1].SetFlash(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot), glm::vec3(0.0f, 0.0f, 1.0f));
+					printf("Wall-E X: %f\n", posXrobot);
+					printf("Wall-E Z: %f\n", posZrobot);
+				}
+				else
+				{
+					adelanteZ = 1;
+					abajo = 1;
+					//adelanteX = 0;
+				}
 
-			if (!adelante && rotaHeli < 90) {
-				posZrobot += /*cos(200*offset*toRadians)*/ offsetPos * deltaTime;
-				rotaHeli += offsetHeli * deltaTime;
-				printf("grados: %f\n", rotaHeli);
-			}
-			if (adelante && rotaHeli > 180 && rotaHeli < 180) {
-				posZrobot -= offsetPos * deltaTime;
-				rotaHeli += offsetHeli * deltaTime;
-				printf("grados: %f\n", rotaHeli);
-			}
+				//if (posZrobot <= 21.0f && posZrobot > 0.0f && adelanteZ == 1) {
+				//	adelanteZ = 1;
+				//	posZrobot -= 0.02*deltaTime;
+				//	//posXrobot += 0.009*deltaTime;
+				//	spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
+				//	spotLights[1].SetFlash(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot), glm::vec3(0.0f, 0.0f, -1.0f));
+				//	printf("Wall-E X: %f\n", posXrobot);
+				//	printf("Wall-E Z: %f\n", posZrobot);
+				//}
 
-			if (rotaHeli > 360) {
-				rotaHeli = 0;
+				if (!adelanteZ && rotaHeli < 90) {
+					posZrobot += /*cos(200*offset*toRadians)*/ offsetPos * deltaTime;
+					rotaHeli += offsetHeli * deltaTime;
+					printf("grados: %f\n", rotaHeli);
+				}
+				if (adelanteZ && rotaHeli > 90 && rotaHeli < 180) {
+					posZrobot -= offsetPos * deltaTime;
+					rotaHeli += offsetHeli * deltaTime;
+					printf("grados: %f\n", rotaHeli);
+				}
+
+				if (rotaHeli > 180) {
+					rotaHeli = 0;
+				}
 			}
+			//else if (posXrobot >= -66.0f && posXrobot < 10.0f /*&& arriba == 1 && abajo == 1*/ && posZrobot <= 0.0f /*&& adelanteX == 0*/) {
+			//	posXrobot += 0.01*deltaTime;
+			//	posZrobot == 0.0f;
+			//	printf("Wall-E X: %f\n", posXrobot);
+			//	printf("Wall-E Z: %f\n", posZrobot);
+			//	spotLights[1].SetPos(glm::vec3(1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
+			//	spotLights[1].SetFlash(glm::vec3(1.0 + posXrobot, 8.5f, 0.1 + posZrobot), glm::vec3(1.0f, 0.0f, 0.0f));
+			//}
 		}
-
+		else if (mainWindow.reseteaAnimacionWallE == true) {
+			posXrobot = 0.0f;
+			posZrobot = 0.0f;
+			spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
+			spotLights[1].SetFlash(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot), glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
 
 		//Eva
 		model = glm::mat4(1.0);
