@@ -99,9 +99,6 @@ Model Estrellas_M;
 Skybox skybox;
 Skybox skyboxNight;
 
-//Valores auxiliares skybox
-bool skyboxNoche = false;
-float tmp_skybox = 0;
 
 
 //materiales objeto interactúe con la luz
@@ -313,6 +310,162 @@ void CreateShaders() {
 	shaderList.push_back(*shader1);
 }
 
+//----------------------------INICIO KEYFRAMES----------------------------------------
+
+//------------------Variables------------------------
+
+//_------------------------generales---------------------------------------------------
+#define MAX_FRAMES 9		//maximo de frames
+int i_max_steps = 300;		//tiempo de la animacion en pasos
+int i_curr_steps = 0;		//ira avanzando en la animacion
+
+//Definiendo una estructura FRAME con movimiento en X y Y
+typedef struct _frame
+{
+	// Variables para guardar los Key Frames
+	float X;		// Variable para PosicionX
+	float Y;		// Variable para PosicionY
+	float XPlus;	// Variable para IncrementoX
+	float YPlus;	// Variable para IncrementoY
+}FRAME;
+
+//---------------------------SOL-----------------------------------------------------
+float SolX = 0, SolY = 0; //Variables auxiliares para mover el sol
+
+FRAME KeyFrameSol[MAX_FRAMES]; //KEYFRAME DE LA sol
+int FrameIndexSol = 4;			//Maximo KeyFrame sol
+bool playSol = true;			//Variable para detener o iniciar animacion de sol
+int playIndexSol = 0;			//indice para ir entre frames
+
+//_---------------------------luna---------------------------------------------------
+float LunaX = 0, LunaY = 0; //Variables auxiliares para mover la luna
+FRAME KeyFrameLuna[MAX_FRAMES]; //KEYFRAME DE LA LUNA
+int FrameIndexLuna = 4;			//Maximo KeyFrame LuNA
+bool playLuna = false;			//Variable para detener o iniciar animacion de Luna		
+int playIndexLuna = 0;				//indice para ir entre frames
+
+//-------------------------FUNCIONES KEYFRAMES  LUNA   -------------------------------------//
+
+//Funcion para regresar a la Luna a su coordenada inicial
+void resetElementsLuna(void){
+	LunaX = 0;
+	LunaY = 0;
+}
+
+
+//Funcion de Interpolacion general para Luna
+void interpolationLUNA(int playIndex) {
+	KeyFrameLuna[playIndex].XPlus = (KeyFrameLuna[playIndex + 1].X - KeyFrameLuna[playIndex].X) / i_max_steps;
+	KeyFrameLuna[playIndex].YPlus = (KeyFrameLuna[playIndex + 1].Y - KeyFrameLuna[playIndex].Y) / i_max_steps;
+	printf("--------------------LUNA  FRAME %i--------------------------------\n\n", playIndex);
+	printf("XPLUS=(%f)-(%f)\n", KeyFrameLuna[playIndex + 1].X , KeyFrameLuna[playIndex].X);
+	printf("YPLUS=(%f)-(%f)\n", KeyFrameLuna[playIndex + 1].Y - KeyFrameLuna[playIndex].Y);
+}
+
+
+//FUNCION QUE DEFINE LA ANiMACION DE LA LUNA 
+void animaLuna(void)
+{
+	//Movimiento del objeto
+	if (playLuna)
+	{
+		//primer interpolacion
+		if (playIndexLuna == 0 and i_curr_steps == 0)
+			interpolationLUNA(playIndexLuna);
+
+		if (i_curr_steps >= i_max_steps) //fin de un frame
+		{
+			//le sumo uno al indice
+			playIndexLuna++;
+			if (playIndexLuna > FrameIndexLuna-1)//fin de la animacion 
+			{
+				playLuna = false;
+				playSol = true;
+				playIndexLuna = 0;
+				resetElementsLuna();
+				i_curr_steps = 0;
+			}
+			else //Siguiente frame
+			{
+				i_curr_steps = 0; //Reset 
+				//Interpolation
+				interpolationLUNA(playIndexLuna);
+				
+			}
+		}
+		else
+		{
+			//Animacion
+			LunaX += KeyFrameLuna[playIndexLuna].XPlus;
+			LunaY += KeyFrameLuna[playIndexLuna].YPlus;
+			i_curr_steps++;
+		}
+
+	}
+}
+
+//-------------------------FUNCIONES KEYFRAMES SOL	 -------------------------------------//
+
+//Funcion para regresar al sol a su coordenada inicial
+void resetElementsSol(void) {
+	SolX = 0;
+	SolY = 0;
+}
+
+//Funcion de Interpolacion general para Sol
+void interpolationSOL(int playIndex) {
+	KeyFrameSol[playIndex].XPlus = (KeyFrameSol[playIndex + 1].X - KeyFrameSol[playIndex].X) / i_max_steps;
+	KeyFrameSol[playIndex].YPlus = (KeyFrameSol[playIndex + 1].Y - KeyFrameSol[playIndex].Y) / i_max_steps;
+	printf("--------------------SOL FRAME %i--------------------------------\n\n", playIndex);
+	printf("XPLUS=(%f)-(%f)\n", KeyFrameSol[playIndex + 1].X , KeyFrameSol[playIndex].X);
+	printf("YPLUS=(%f)-(%f)\n", KeyFrameSol[playIndex + 1].Y, KeyFrameSol[playIndex].Y);
+}
+
+
+//FUNCION QUE DEFINE LA ANiMACION DEl sol
+void animaSol(void)
+{
+	//Movimiento del objeto
+	if (playSol)
+	{
+		//primer interpolacion
+		if(playIndexSol==0 and i_curr_steps==0)
+			interpolationSOL(playIndexSol);
+
+		if (i_curr_steps >= i_max_steps) //fin de un frame
+		{
+			//le sumo uno al indice
+			playIndexSol++;
+			if (playIndexSol > FrameIndexSol-1)//fin de la animacion 
+			{
+				playSol = false;
+				playLuna = true;
+				playIndexSol = 0;
+				resetElementsSol();
+				i_curr_steps = 0;
+			}
+			else //Siguiente frame
+			{
+				i_curr_steps = 0; //Reset 
+				//Interpolation
+				interpolationSOL(playIndexSol);
+
+			}
+		}
+		else
+		{
+			//Animacion
+			SolX += KeyFrameSol[playIndexSol].XPlus;
+			SolY += KeyFrameSol[playIndexSol].YPlus;
+			i_curr_steps++;
+		}
+
+	}
+}
+
+
+
+//------------------------INICIA EL MAIN-----------------------------------
 int main() {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
@@ -851,6 +1004,43 @@ int main() {
 
 	float offsetHeli = 0.03, offsetPos = 0.01f, giroHelice = 0.0f;
 
+
+	// KEY FRAMES LUNA
+	
+	KeyFrameLuna[0].X = 0.0f;
+	KeyFrameLuna[0].Y = 0.0f;
+
+	KeyFrameLuna[1].X = 150.0f;
+	KeyFrameLuna[1].Y = 200.0f;
+
+	KeyFrameLuna[2].X = 300.0f;
+	KeyFrameLuna[2].Y = 400.0f;
+
+	KeyFrameLuna[3].X = 450.0f;
+	KeyFrameLuna[3].Y = 200.0f;
+
+	KeyFrameLuna[4].X = 600.0f;
+	KeyFrameLuna[4].Y = 5.0f;
+
+	// KEY FRAMES SOL
+	
+	KeyFrameSol[0].X = 0.0f;
+	KeyFrameSol[0].Y = 0.0f;
+
+	KeyFrameSol[1].X = 150.0f;
+	KeyFrameSol[1].Y = 200.0f;
+
+	KeyFrameSol[2].X = 300.0f;
+	KeyFrameSol[2].Y = 400.0f;
+
+	KeyFrameSol[3].X = 450.0f;
+	KeyFrameSol[3].Y = 200.0f;
+
+	KeyFrameSol[4].X = 600.0f;
+	KeyFrameSol[4].Y = 5.0f;
+
+
+
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
 
@@ -871,45 +1061,23 @@ int main() {
 
 		// ------------------------------------------ CAMBIO DE SKYBOX ------------------------------------------
 		// skybox de día
-		if (tmp_skybox <= 15.0f && !skyboxNoche)
+		if (playSol)
 		{
-			tmp_skybox += tiempo_offset * deltaTime;
 			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
 			shaderList[0].SetPointLights(pointLights, 0);
-			//shaderList[0].SetSpotLights(spotLights, 1);
-
-			glm::mat4 model(1.0);
-			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-200.0f, 100.0f, 20.0f));
-			model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Sol_M.RenderModel();
-
-			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
-			if (tmp_skybox >= 14.99f)
-				skyboxNoche = true;
+			//shaderList[0].SetSpotLights(spotLights, 1)
 		}
+
 		// Proyección de skybox de noche
-		if (tmp_skybox >= 0.0f && skyboxNoche)
+		if (playLuna)
 		{
-			tmp_skybox -= tiempo_offset * deltaTime;
 			skyboxNight.DrawSkybox(camera.calculateViewMatrix(), projection);
 			shaderList[0].UseShader();
 			shaderList[0].SetPointLights(pointLights, pointLightCount);
 			//shaderList[0].SetSpotLights(spotLights, spotLightCount);
-
-			glm::mat4 model(1.0);
-			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-200.0f, 100.0f, 20.0f));
-			model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Luna_M.RenderModel();
-
-			// Si el tiempo es el último tiempo para el skybox actual, entonces se debe cambiar el tipo de skybox
-			if (tmp_skybox <= 0.01f)
-				skyboxNoche = false;
 		}
+		
 
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
@@ -988,6 +1156,29 @@ int main() {
 		//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0));
 
 		// ------------------------------------------ CARGA DE MODELOS ------------------------------------------
+		
+		//------------------SOL--------------
+		//_------------------ANIMACION KEYFRAMES-------------
+		animaSol();
+		//render
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-300.0f+SolX, -30.0f+SolY, 20.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Sol_M.RenderModel();
+		
+
+		//--------------------------LUNA-------------------------------
+		//_------------------ANIMACION KEYFRAMES-------------
+		animaLuna();
+		//render
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-300.0f+LunaX, -30.0f+LunaY, 20.0f));
+		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luna_M.RenderModel();
+
+
 		//Wall-E
 		//glm::mat4 modelaux(1.0);
 		model = glm::mat4(1.0);
