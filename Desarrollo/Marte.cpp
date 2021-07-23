@@ -37,25 +37,10 @@
 #include "PointLight.h"
 #include "Material.h"
 
+// Implementación de la librería de audio
 #include <irrklang/irrKlang.h>
 
-// Also, we tell the compiler to use the namespaces 'irrklang'.
-// All classes and functions of irrKlang can be found in the namespace 'irrklang'.
-// If you want to use a class of the engine,
-// you'll have to type an irrklang:: before the name of the class.
-// For example, to use the ISoundEngine, write: irrklang::ISoundEngine. To avoid having
-// to put irrklang:: before of the name of every class, we tell the compiler that
-// we use that namespaces here.
-
-using namespace irrklang;
-
-
-// To be able to use the irrKlang.dll file, we need to link with the irrKlang.lib.
-// We could set this option in the project settings, but to make it easy we use
-// a pragma comment:
-
-#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
-
+#pragma comment(lib, "irrKlang.lib") // Para poder ocupar el irrKlang.dll, se requiere enlazarlo con irrKlang.lib.
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -991,19 +976,21 @@ int main() {
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
+	
+	//Inicializar el audio
+	irrklang::ISoundEngine* sonido = irrklang::createIrrKlangDevice();
 
-	// start the sound engine with default parameters
-	ISoundEngine* engine = createIrrKlangDevice();
-	if (!engine) {
-		printf("Could not startup engine\n");
-		return 0; // error starting up the engine
+	if (!sonido) {
+		printf("Error al iniciar el audio\n");
+		return -1;
 	}
+	
+	sonido->play2D("media/air.mp3", true); //Reproducir sonido de fondo -Soundtrack-
 
-	// play a single sound
-	engine->play2D("media/air.mp3");
+	//Banderas para efectos de sonido
+	bool reproduceW = true, reproduceW2;
 
 	float offsetHeli = 0.03, offsetPos = 0.01f, giroHelice = 0.0f;
-
 
 	// KEY FRAMES LUNA
 	
@@ -1134,6 +1121,7 @@ int main() {
 			spotLights[5].SetColor(glm::vec3(1.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
 			spotLights[6].SetColor(glm::vec3(0.0f, 1.0f, 0.0f)); //Cambiar el color de la luz
 			spotLights[7].SetColor(glm::vec3(0.0f, 0.0f, 1.0f)); //Cambiar el color de la luz
+			
 		} else { // No hay cambio de color
 			//mainWindow.getCambioColor();
 			spotLights[1].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
@@ -1213,7 +1201,11 @@ int main() {
 		Avatar_M.RenderModel(); //Cuerpo de Wall-E		
 
 		if (mainWindow.activaAnimacionWallE == true) {
-
+			reproduceW2 = true;
+			if (reproduceW) {
+				sonido->play2D("media/wall-e.mp3", false); //Efecto de sonido
+			}
+			reproduceW = false;
 			if (posXrobot <= 100.0f && posXrobot > -65.0f && adelanteX == 1) {
 				posXrobot -= 0.01*deltaTime;
 				printf("Wall-E X: %f\n", posXrobot);
@@ -1284,6 +1276,11 @@ int main() {
 			//}
 		}
 		else if (mainWindow.reseteaAnimacionWallE == true) {
+			reproduceW = true;
+			if (reproduceW2) {
+				sonido->play2D("media/wall-e.mp3", false); //Efecto de sonido
+			}
+			reproduceW2 = false;
 			posXrobot = 0.0f;
 			posZrobot = 0.0f;
 			spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
@@ -2096,6 +2093,6 @@ int main() {
 		mainWindow.swapBuffers();
 	}
 
-	engine->drop(); // delete engine
+	sonido->drop(); // borrar sonido
 	return 0;
 }
