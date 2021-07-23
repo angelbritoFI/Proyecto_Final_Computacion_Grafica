@@ -1292,10 +1292,11 @@ int main() {
 		}
 		else if (mainWindow.reseteaAnimacionWallE == true) {
 			reproduceW = true;
-			if (reproduceW2) {
-				sonido->play2D("media/wall-e.mp3", false); //Efecto de sonido
-			}
-			reproduceW2 = false;
+			//COMENTÉ ESTAS LINEAS PORQUE SI NO SE INICIA LA ANIMACIÓN DE WALL-E GENERA ERROR
+			//if (reproduceW2) {
+			//	sonido->play2D("media/wall-e.mp3", false); //Efecto de sonido
+			//}
+			//reproduceW2 = false;
 			posXrobot = 0.0f;
 			posZrobot = 0.0f;
 			spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
