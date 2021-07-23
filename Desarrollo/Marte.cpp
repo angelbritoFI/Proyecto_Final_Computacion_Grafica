@@ -992,8 +992,7 @@ int main() {
 
 	float offsetHeli = 0.03, offsetPos = 0.01f, giroHelice = 0.0f;
 
-	// KEY FRAMES LUNA
-	
+	// KEY FRAMES LUNA	
 	KeyFrameLuna[0].X = 0.0f;
 	KeyFrameLuna[0].Y = 0.0f;
 
@@ -1026,7 +1025,22 @@ int main() {
 	KeyFrameSol[4].X = 600.0f;
 	KeyFrameSol[4].Y = 5.0f;
 
-
+	// Interceptor Jedi
+	GLfloat offset = 0.0f;
+	GLfloat angulo = 0.0f;
+	float posXnave = -150.0f;
+	float posYnave = 180.0f;
+	GLfloat rotaDS = 0.0f;
+	GLfloat rotacionN1 = 0.0f;
+	GLfloat rotacionN2 = 0.0f;
+	GLfloat posZnave, desaparece;
+	bool baja = true;
+	bool giraI = false;
+	bool avanza = false;
+	bool vuelta = false;
+	bool irse = false;
+	bool reproduceE = true;
+	bool reproduceSW = true;
 
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
@@ -1064,7 +1078,7 @@ int main() {
 			shaderList[0].SetPointLights(pointLights, pointLightCount);
 			//shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		}
-		
+
 
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
@@ -1091,11 +1105,11 @@ int main() {
 		shaderList[0].SetDirectionalLight(&mainLight);
 		//shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
-		
+
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::mat4 modelaux2(1.0);
-		
+
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
@@ -1121,11 +1135,12 @@ int main() {
 			spotLights[5].SetColor(glm::vec3(1.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
 			spotLights[6].SetColor(glm::vec3(0.0f, 1.0f, 0.0f)); //Cambiar el color de la luz
 			spotLights[7].SetColor(glm::vec3(0.0f, 0.0f, 1.0f)); //Cambiar el color de la luz
-			
-		} else { // No hay cambio de color
-			//mainWindow.getCambioColor();
+
+		}
+		else { // No hay cambio de color
+		 //mainWindow.getCambioColor();
 			spotLights[1].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
-			
+
 			//spotLights[2].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f)); 
 			spotLights[2].SetColor(glm::vec3(0.0f, 0.0f, 0.0f)); //Cambiar el color de la luz
 			//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0f));
@@ -1144,24 +1159,24 @@ int main() {
 		//spotLights[3].SetPos(glm::vec3(-60.0f, 0.0f, 40.0));
 
 		// ------------------------------------------ CARGA DE MODELOS ------------------------------------------
-		
+
 		//------------------SOL--------------
 		//_------------------ANIMACION KEYFRAMES-------------
 		animaSol();
 		//render
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-300.0f+SolX, -30.0f+SolY, 20.0f));
+		model = glm::translate(model, glm::vec3(-300.0f + SolX, -30.0f + SolY, 20.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Sol_M.RenderModel();
-		
+
 
 		//--------------------------LUNA-------------------------------
 		//_------------------ANIMACION KEYFRAMES-------------
 		animaLuna();
 		//render
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-300.0f+LunaX, -30.0f+LunaY, 20.0f));
+		model = glm::translate(model, glm::vec3(-300.0f + LunaX, -30.0f + LunaY, 20.0f));
 		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luna_M.RenderModel();
@@ -1178,18 +1193,18 @@ int main() {
 			//modelaux = model;
 		}
 		else if (posXrobot <= -65.0f && posXrobot > -66.0f) {
-			 if (posZrobot > -20.0f && adelanteZ == 1 /*&& arriba == 0*/) {
+			if (posZrobot > -20.0f && adelanteZ == 1 /*&& arriba == 0*/) {
 				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
 				model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
-			 }
-			 if (posZrobot < 20.0f && adelanteZ == 0 /*&& abajo == 0*/) {
+			}
+			if (posZrobot < 20.0f && adelanteZ == 0 /*&& abajo == 0*/) {
 				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
 				model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
-			 }
-			 //if (posZrobot <= 21.0f && posZrobot > 0.0f && adelanteZ == 1) {
-				//modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
-				//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
-			 //}
+			}
+			//if (posZrobot <= 21.0f && posZrobot > 0.0f && adelanteZ == 1) {
+			   //modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
+			   //model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
+			//}
 		}
 		//else if (posXrobot >= -66.0f && posXrobot < 10.0f /*&& arriba == 1 && abajo == 1*/ && posZrobot <= 0.0f /*&& adelanteX == 0*/) {
 		//	modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
@@ -1323,13 +1338,106 @@ int main() {
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Eva_M.RenderModel();
 
+		offset += 0.1f * deltaTime; //ángulo de inclinación
+		posZnave = cos(40 * offset * toRadians); //arriba y abajo
+				
+		if (baja) {
+			desaparece = 1.0f; //Aparece estrella de la muerte
+			if (posYnave > 110.0f) {
+				posYnave -= 0.02f * deltaTime;
+			}
+			else {
+				giraI = true;
+			}
+		}
+
+		if (giraI) {
+			desaparece = 1.0f; //Aparece estrella de la muerte
+			baja = false;
+			if (rotacionN1 < 90.0f) {
+				rotacionN1 += 0.2f *deltaTime;
+				posXnave += 0.01f *deltaTime;
+			}
+			else if (rotacionN2 > -90.0f) {
+				rotacionN2 -= 0.2f *deltaTime;
+				posXnave += 0.01f *deltaTime;
+			}
+			else
+			{
+				avanza = true;
+			}
+		}
+
+		if (avanza) {
+			desaparece = 1.0f; //Aparece estrella de la muerte
+			giraI = false;
+			if (posXnave < 75.0f) {
+				posXnave += 0.1f *deltaTime;
+			} else if (posXnave < 80.0f) {
+				if (reproduceE) {
+					sonido->play2D("media/explosion.wav", false); //Efecto de sonido
+				}
+				reproduceE = false;
+				desaparece = 0.0f;
+				posXnave += 0.05f *deltaTime;
+			} else {
+				vuelta = true;
+			}
+		}
+
+		if (vuelta) {
+			desaparece = 0.0f;
+			avanza = false;
+			if (reproduceSW) {
+				sonido->play2D("media/interceptor-jedi.mp3", false); //Efecto de sonido
+			}
+			reproduceSW = false;
+			if (rotacionN1 < 180.0f) {
+				rotacionN1 += 0.2f *deltaTime;
+				posXnave += 0.1f *deltaTime;
+			}
+			else {
+				irse = true;
+			}
+		}
+
+		if (irse) {
+			desaparece = 0.0f;
+			vuelta = false;
+			if (angulo < 100.0f) {
+				angulo += 1.0f * deltaTime; //ángulo de inclinación
+				posZnave = tan(angulo * toRadians); //arriba y abajo
+			}
+			else { //Regresar a valores iniciales
+				irse = false;
+				reproduceE = true;
+				reproduceSW = true;
+				desaparece = 1.0f;
+				baja = true;
+				posXnave = -150.0f;
+				posYnave = 180.0f;
+				rotacionN1 = 0.0f;
+				rotacionN2 = 0.0f;
+			}
+		}
+
 		//Nave Interceptor Jedi
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(15.0f, 50.0f, 20.0f));
+		model = glm::translate(model, glm::vec3(posXnave, posYnave, posZnave));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotacionN1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionN2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		InterceptorJedi_M.RenderModel();
+				
+		rotaDS += 0.01 * deltaTime; //Rotación Estrella de la muerte
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(85.0f, 100.0f, 20.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, 5 * rotaDS * toRadians, glm::vec3(0.0f, desaparece, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		DeathStar_M.RenderModel();
 
 		//Speeder Bike
 		model = glm::mat4(1.0);
@@ -2044,15 +2152,7 @@ int main() {
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Basura3_M.RenderModel();
-
-		/////////////////////////////////////////////////////////////////////////////
-				
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(85.0f, 100.0f, 20.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		DeathStar_M.RenderModel();
-
+		
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-100.0f, 200.0f, 100.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
