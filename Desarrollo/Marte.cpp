@@ -317,7 +317,7 @@ typedef struct _frame
 //---------------------------SOL-----------------------------------------------------
 float SolX = 0, SolY = 0; //Variables auxiliares para mover el sol
 
-FRAME KeyFrameSol[MAX_FRAMES]; //KEYFRAME DE LA sol
+FRAME KeyFrameSol[MAX_FRAMES]; //KEYFRAME DEL sol
 int FrameIndexSol = 4;			//Maximo KeyFrame sol
 bool playSol = true;			//Variable para detener o iniciar animacion de sol
 int playIndexSol = 0;			//indice para ir entre frames
