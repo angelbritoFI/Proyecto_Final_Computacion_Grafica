@@ -988,7 +988,7 @@ int main() {
 	sonido->play2D("media/air.mp3", true); //Reproducir sonido de fondo -Soundtrack-
 
 	//Banderas para efectos de sonido
-	bool reproduceW = true, reproduceW2;
+	bool reproduceW = true, reproduceW2, reproduceS = true;
 
 	float offsetHeli = 0.03, offsetPos = 0.01f, giroHelice = 0.0f;
 
@@ -1346,7 +1346,10 @@ int main() {
 		SpeederBike_M.RenderModel();
 
 		if (mainWindow.activaAnimacionSpeeder == true) {
-
+			if (reproduceS) {
+				sonido->play2D("media/star-wars-dogfight.mp3", false); //Efecto de sonido
+			}
+			reproduceS = false;
 			if (posYspeeder > 0.0f && adelanteY == 0) {
 				//posYspeeder -= 0.05*deltaTime;
 				posYspeeder -= 0.1 * sin(0.05)/* + cos(0.05)*/;
@@ -1369,6 +1372,7 @@ int main() {
 			}
 		}
 		else if (mainWindow.reseteaAnimacionSpeeder == true) {
+			reproduceS = true;
 			posZspeeder = 0.0f;
 			posYspeeder = 0.0f;
 		}
