@@ -300,9 +300,9 @@ void CreateShaders() {
 //------------------Variables------------------------
 
 //_------------------------generales---------------------------------------------------
-#define MAX_FRAMES 9		//maximo de frames
+#define MAX_FRAMES 20		//maximo de frames
 int i_max_steps = 300;		//tiempo de la animacion en pasos
-int i_curr_steps = 0;		//ira avanzando en la animacion
+
 
 //Definiendo una estructura FRAME con movimiento en X y Y
 typedef struct _frame
@@ -312,11 +312,19 @@ typedef struct _frame
 	float Y;		// Variable para PosicionY
 	float XPlus;	// Variable para IncrementoX
 	float YPlus;	// Variable para IncrementoY
+	float Z;		// Variable para PosicionZ
+	float GX;		// Variable para Giro
+	float GY;		// Variable para Giro
+	float GZ;		// Variable para Giro
+	float ZPlus;	// Variable para IncrementoZ
+	float GXPlus;	// Variable para IncrementoG
+	float GYPlus;	// Variable para IncrementoG
+	float GZPlus;	// Variable para IncrementoG
 }FRAME;
 
 //---------------------------SOL-----------------------------------------------------
+int i_curr_steps = 0;		//ira avanzando en la animacion
 float SolX = 0, SolY = 0; //Variables auxiliares para mover el sol
-
 FRAME KeyFrameSol[MAX_FRAMES]; //KEYFRAME DEL sol
 int FrameIndexSol = 4;			//Maximo KeyFrame sol
 bool playSol = true;			//Variable para detener o iniciar animacion de sol
@@ -328,6 +336,16 @@ FRAME KeyFrameLuna[MAX_FRAMES]; //KEYFRAME DE LA LUNA
 int FrameIndexLuna = 4;			//Maximo KeyFrame LuNA
 bool playLuna = false;			//Variable para detener o iniciar animacion de Luna		
 int playIndexLuna = 0;				//indice para ir entre frames
+
+//_---------------------------EVE---------------------------------------------------
+int i_curr_steps_EVE = 0;		//ira avanzando en la animacion de eva
+float evX = 0, evY = 0, evZ = 0, evGX = 0, evGY = 0, evGZ = 0; //Variables auxiliares para mover la a ev
+FRAME KeyFrameEv[MAX_FRAMES]; //KEYFRAME DE eve
+int FrameIndexEv = 17;			//Maximo KeyFrame eve
+bool playEv = true;			//Variable para detener o iniciar animacion de eve
+int playIndexEv = 0;				//indice para ir entre frames
+float velocidadEve = 90;
+
 
 //-------------------------FUNCIONES KEYFRAMES  LUNA   -------------------------------------//
 
@@ -447,6 +465,76 @@ void animaSol(void)
 
 	}
 }
+
+
+
+//--------------------FUNCIONESS KEYFRAMES EVE---------------------------------------------------//
+
+//Funcion para regresar al EVE a su coordenada inicial
+void resetElementsEV(void) {
+	evX = 0;
+	evY = 0;
+	evZ = 0;
+	evGX = 0;
+	evGY = 0;
+	evGZ = 0;
+}
+
+//Funcion de Interpolacion general para EVE
+void interpolationEV(int playIndex) {
+	KeyFrameEv[playIndex].XPlus = (KeyFrameEv[playIndex + 1].X - KeyFrameEv[playIndex].X) / i_max_steps;
+	KeyFrameEv[playIndex].YPlus = (KeyFrameEv[playIndex + 1].Y - KeyFrameEv[playIndex].Y) / i_max_steps;
+	KeyFrameEv[playIndex].ZPlus = (KeyFrameEv[playIndex + 1].Z - KeyFrameEv[playIndex].Z) / i_max_steps;
+	KeyFrameEv[playIndex].GXPlus = (KeyFrameEv[playIndex + 1].GX - KeyFrameEv[playIndex].GX) / i_max_steps;
+	KeyFrameEv[playIndex].GYPlus = (KeyFrameEv[playIndex + 1].GY - KeyFrameEv[playIndex].GY) / i_max_steps;
+	KeyFrameEv[playIndex].GZPlus = (KeyFrameEv[playIndex + 1].GZ - KeyFrameEv[playIndex].GZ) / i_max_steps;
+}
+
+
+//FUNCION QUE DEFINE LA ANiMACION DEl EVE
+void animaEV(void)
+{
+	//Movimiento del objeto
+	if (playEv)
+	{
+		//primer interpolacion
+		if (playIndexEv == 0 and i_curr_steps_EVE == 0)
+			interpolationEV(playIndexEv);
+
+		if (i_curr_steps >= i_max_steps) //fin de un frame
+		{
+			//le sumo uno al indice
+			playIndexEv++;
+			if (playIndexEv > FrameIndexEv - 1)//fin de la animacion 
+			{
+				playEv = false;
+				playIndexEv = 0;
+				resetElementsEV();
+				i_curr_steps_EVE = 0;
+			}
+			else //Siguiente frame
+			{
+				i_curr_steps_EVE = 0; //Reset 
+				//Interpolation
+				interpolationEV(playIndexEv);
+
+			}
+		}
+		else
+		{
+			//Animacion
+			evX += KeyFrameEv[playIndexEv].XPlus;
+			evY += KeyFrameEv[playIndexEv].YPlus;
+			evZ += KeyFrameEv[playIndexEv].ZPlus;
+			evGX += KeyFrameEv[playIndexEv].GXPlus;
+			evGY += KeyFrameEv[playIndexEv].GYPlus;
+			evGZ += KeyFrameEv[playIndexEv].GZPlus;
+			i_curr_steps_EVE += i_curr_steps_EVE + velocidadEve;
+		}
+
+	}
+}
+
 
 
 
@@ -1025,6 +1113,142 @@ int main() {
 	KeyFrameSol[4].X = 600.0f;
 	KeyFrameSol[4].Y = 5.0f;
 
+
+	// KEY FRAMES EV
+
+	KeyFrameEv[0].X = 0.0f;
+	KeyFrameEv[0].Y = 0.0f;
+	KeyFrameEv[0].Z = 0.0f;
+	KeyFrameEv[0].GX = 0.0f;
+	KeyFrameEv[0].GY = 0.0f;
+	KeyFrameEv[0].GZ = 0.0f;
+
+	KeyFrameEv[1].X = -2.0f;
+	KeyFrameEv[1].Y = 0.0f;
+	KeyFrameEv[1].Z = 0.0f;
+	KeyFrameEv[1].GX = 90.0f;
+	KeyFrameEv[1].GY = 0.0f;
+	KeyFrameEv[1].GZ = 0.0f;
+
+	KeyFrameEv[2].X = -5.0f;
+	KeyFrameEv[2].Y = 0.0f;
+	KeyFrameEv[2].Z = -8.0f;
+	KeyFrameEv[2].GX = 90.0f;
+	KeyFrameEv[2].GY = 0.0f;
+	KeyFrameEv[2].GZ = 45.0f;
+
+	KeyFrameEv[3].X = -10.0f;
+	KeyFrameEv[3].Y = 0.0f;
+	KeyFrameEv[3].Z = -25.0f;
+	KeyFrameEv[3].GX = 90.0f;
+	KeyFrameEv[3].GY = 0.0f;
+	KeyFrameEv[3].GZ = 90.0f;
+
+	KeyFrameEv[4].X = -5.0f;
+	KeyFrameEv[4].Y = 1.0f;
+	KeyFrameEv[4].Z = -34.0f;
+	KeyFrameEv[4].GX = 90.0f;
+	KeyFrameEv[4].GY = 0.0f;
+	KeyFrameEv[4].GZ = 135.0f;
+
+	KeyFrameEv[5].X = 0.0f;
+	KeyFrameEv[5].Y = 2.0f;
+	KeyFrameEv[5].Z = -40.0f;
+	KeyFrameEv[5].GX = 90.0f;
+	KeyFrameEv[5].GY = 0.0f;
+	KeyFrameEv[5].GZ = 180.0f;
+
+	KeyFrameEv[6].X = 5.0f;
+	KeyFrameEv[6].Y = 3.0f;
+	KeyFrameEv[6].Z = -34.0f;
+	KeyFrameEv[6].GX = 90.0f;
+	KeyFrameEv[6].GY = 0.0f;
+	KeyFrameEv[6].GZ = 225.0f;
+
+	KeyFrameEv[7].X = 10.0f;
+	KeyFrameEv[7].Y = 4.0f;
+	KeyFrameEv[7].Z = -25.0f;
+	KeyFrameEv[7].GX = 90.0f;
+	KeyFrameEv[7].GY = 0.0f;
+	KeyFrameEv[7].GZ = 270.0f;
+
+	KeyFrameEv[8].X = 5.0f;
+	KeyFrameEv[8].Y = 5.0f;
+	KeyFrameEv[8].Z = -16.0f;
+	KeyFrameEv[8].GX = 90.0f;
+	KeyFrameEv[8].GY = 0.0f;
+	KeyFrameEv[8].GZ = 315.0f;
+
+	KeyFrameEv[8].X = 0.0f;
+	KeyFrameEv[8].Y = 6.0f;
+	KeyFrameEv[8].Z = -10.0f;
+	KeyFrameEv[8].GX = 90.0f;
+	KeyFrameEv[8].GY = 0.0f;
+	KeyFrameEv[8].GZ = 360.0f;
+
+	KeyFrameEv[9].X = -5.0f;
+	KeyFrameEv[9].Y = 7.0f;
+	KeyFrameEv[9].Z = -16.4f;
+	KeyFrameEv[9].GX = 90.0f;
+	KeyFrameEv[9].GY = 0.0f;
+	KeyFrameEv[9].GZ = 405.0f;
+
+	KeyFrameEv[10].X = -10.0f;
+	KeyFrameEv[10].Y = 8.0f;
+	KeyFrameEv[10].Z = -25.0f;
+	KeyFrameEv[10].GX = 90.0f;
+	KeyFrameEv[10].GY = 0.0f;
+	KeyFrameEv[10].GZ = 450.0f;
+
+	KeyFrameEv[11].X = -5.0f;
+	KeyFrameEv[11].Y = 9.0f;
+	KeyFrameEv[11].Z = -34.0f;
+	KeyFrameEv[11].GX = 90.0f;
+	KeyFrameEv[11].GY = 0.0f;
+	KeyFrameEv[11].GZ = 495.0f;
+
+	KeyFrameEv[12].X = 0.0f;
+	KeyFrameEv[12].Y = 10.0f;
+	KeyFrameEv[12].Z = -40.0f;
+	KeyFrameEv[12].GX = 90.0f;
+	KeyFrameEv[12].GY = 0.0f;
+	KeyFrameEv[12].GZ = 540.0f;
+
+	KeyFrameEv[13].X = 5.0f;
+	KeyFrameEv[13].Y = 11.0f;
+	KeyFrameEv[13].Z = -34.0f;
+	KeyFrameEv[13].GX = 90.0f;
+	KeyFrameEv[13].GY = 0.0f;
+	KeyFrameEv[13].GZ = 585.0f;
+
+	KeyFrameEv[14].X = 10.0f;
+	KeyFrameEv[14].Y = 12.0f;
+	KeyFrameEv[14].Z = -25.f;
+	KeyFrameEv[14].GX = 90.0f;
+	KeyFrameEv[14].GY = 0.0f;
+	KeyFrameEv[14].GZ = 630.0f;
+
+	KeyFrameEv[15].X = 5.0f;
+	KeyFrameEv[15].Y = 13.0f;
+	KeyFrameEv[15].Z = -5.0f;
+	KeyFrameEv[15].GX = 90.0f;
+	KeyFrameEv[15].GY = 0.0f;
+	KeyFrameEv[15].GZ = 675.0f;
+
+	KeyFrameEv[16].X = 0.0f;
+	KeyFrameEv[16].Y = 14.0f;
+	KeyFrameEv[16].Z = 0.0f;
+	KeyFrameEv[16].GX = 90.0f;
+	KeyFrameEv[16].GY = 0.0f;
+	KeyFrameEv[16].GZ = 720.0f;
+
+	KeyFrameEv[17].X = 0.0f;
+	KeyFrameEv[17].Y = 0.0f;
+	KeyFrameEv[17].Z = 0.0f;
+	KeyFrameEv[17].GX = 0.0f;
+	KeyFrameEv[17].GY = 0.0f;
+	KeyFrameEv[17].GZ = 720.0f;
+
 	// Interceptor Jedi
 	GLfloat offset = 0.0f;
 	GLfloat angulo = 0.0f;
@@ -1331,11 +1555,16 @@ int main() {
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PieI_M.RenderModel();
 
-		//Eva
+		//-----------------------------Eve-------------------------
+		animaEV();
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 5.0f, 25.0f));
+		model = glm::translate(model, glm::vec3(0.0f + evX, 5.0f + evY, 25.0f + evZ));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, evGX * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, evGY * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, evGZ * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Eva_M.RenderModel();
 
