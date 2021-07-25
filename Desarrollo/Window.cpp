@@ -111,7 +111,17 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	
+
+	if (key == GLFW_KEY_1) {
+		theWindow->camara = 1;
+	}
+
+	if (key == GLFW_KEY_2) {
+		theWindow->camara = 2;
+	}
+	if (key == GLFW_KEY_3) {
+		theWindow->camara = 3;
+	}
 	if (key == GLFW_KEY_C && action == GLFW_PRESS && contadorColor % 2 == 0) {
 		theWindow->cambioColor = true;
 		contadorColor = contadorColor+1;

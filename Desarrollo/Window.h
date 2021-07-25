@@ -32,6 +32,12 @@ class Window {
 			return cambioColor;
 		}
 
+		//Método publico para cambiar de camara
+		int getCamara() {
+			return camara;
+		}
+
+
 		//Métodos públicos para mover al avatar
 		GLfloat getMovAvatarX() {
 			return movimientoAvatar[0]; // X
@@ -67,6 +73,7 @@ class Window {
 		GLfloat lastY;
 		GLfloat xChange;
 		GLfloat yChange;
+		int camara=1; //selecciona que camara ver
 		bool cambioColor; //Control del color
 		//int contadorColor;
 		GLfloat movimientoAvatar[1]; //Variable float para el movimiento de Wall-E

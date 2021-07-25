@@ -548,7 +548,8 @@ int main() {
 	CreateShaders();
 	//printf("posXrobot: %f\n", posXrobot);
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 1.0f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f, 1.0f, 0.5f);
+
 
 	//Piso
 	plainTexture = Texture("Textures/plain.png");
@@ -1265,6 +1266,10 @@ int main() {
 	bool irse = false;
 	bool reproduceE = true;
 	bool reproduceSW = true;
+	//vistas
+	bool flag = true;
+	int giro=0;
+
 
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
@@ -1275,10 +1280,41 @@ int main() {
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
-		//Recibir eventos del usuario
+		//Recibir eventos del usuario en camara uno 
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+		if (mainWindow.getCamara() == 1) {
+
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			camera.setCameraDirection(camera.getCameraDirection());
+			camera.setCameraPosition(camera.getCameraPosition());
+		}
+		else if (mainWindow.getCamara() == 2) {
+			camera.setGiro(0,0);
+			switch (giro)
+			{
+			case 1:
+				camera.setCameraPosition(glm::vec3(0.0f + posXrobot, 10.0f, 20.0f + posZrobot));
+				camera.setCameraDirection(glm::vec3(0.0f, 0.0f, -1.0f));
+				break;
+				
+			case 2:
+				camera.setCameraPosition(glm::vec3(0.0f + posXrobot, 10.0f, -20.0f + posZrobot));
+				camera.setCameraDirection(glm::vec3(0.0f, 0.0f, 1.0f));
+				break;
+			default:
+				camera.setCameraPosition(glm::vec3(25.0f + posXrobot, 10.0f, 0.0f + posZrobot));
+				camera.setCameraDirection(glm::vec3(-1.0f, 0.0f, 0.0f));
+			}
+		}
+		else if (mainWindow.getCamara() == 3) {
+			camera.setCameraPosition(glm::vec3(0.0+camera.getCameraPosition().x, 100.0f, 0.0f+camera.getCameraPosition().z));
+			camera.setCameraDirection(glm::vec3(-1.0f, 0.0f, 0.0f));
+			camera.setGiro(0, -90);
+			camera.keyControlXZ(mainWindow.getsKeys(), deltaTime);
+		}
+
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -1420,6 +1456,7 @@ int main() {
 			if (posZrobot > -20.0f && adelanteZ == 1 /*&& arriba == 0*/) {
 				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
 				model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
+				
 			}
 			if (posZrobot < 20.0f && adelanteZ == 0 /*&& abajo == 0*/) {
 				modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
@@ -1429,6 +1466,7 @@ int main() {
 			   //modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
 			   //model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de sus engranes
 			//}
+			
 		}
 		//else if (posXrobot >= -66.0f && posXrobot < 10.0f /*&& arriba == 1 && abajo == 1*/ && posZrobot <= 0.0f /*&& adelanteX == 0*/) {
 		//	modelaux = model = glm::translate(model, glm::vec3(0.0f + posXrobot, -1.0f, 0.0f + posZrobot));
@@ -1453,6 +1491,7 @@ int main() {
 			}
 			else if (posXrobot <= -65.0f && posXrobot > -66.0f && adelanteX == 1) {
 				if (posZrobot > -20.0f && adelanteZ == 1/* && arriba == 0*/) {
+					giro = 1;
 					posZrobot -= 0.01*deltaTime;
 					//posXrobot += 0.009*deltaTime;
 					spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));
@@ -1466,6 +1505,7 @@ int main() {
 				}
 
 				if (posZrobot < 20.0f && adelanteZ == 0 /*&& abajo == 0*/) {
+					giro = 2;
 					posZrobot += 0.01*deltaTime;
 					//posXrobot += 0.009*deltaTime;
 					spotLights[1].SetPos(glm::vec3(-1.0 + posXrobot, 8.5f, 0.1 + posZrobot));

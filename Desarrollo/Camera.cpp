@@ -16,6 +16,9 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	update();
 }
 
+
+
+
 void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
@@ -41,6 +44,31 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 	}
 }
 
+void Camera::keyControlXZ(bool* keys, GLfloat deltaTime)
+{
+	GLfloat velocity = moveSpeed * deltaTime;
+	if (keys[GLFW_KEY_W])
+	{
+		position.x -= velocity;
+	}
+
+	if (keys[GLFW_KEY_S])
+	{
+		position.x += velocity;
+	}
+
+	if (keys[GLFW_KEY_A])
+	{
+		position.z += velocity;
+	}
+
+	if (keys[GLFW_KEY_D])
+	{
+		position.z -= velocity;
+	}
+	update();
+}
+
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 {
 	xChange *= turnSpeed;
@@ -62,6 +90,12 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 	update();
 }
 
+void Camera::setGiro(float x,float y) {
+	yaw = x;
+	pitch = y;
+	update();
+}
+
 glm::mat4 Camera::calculateViewMatrix()
 {
 	return glm::lookAt(position, position + front, up);
@@ -72,10 +106,19 @@ glm::vec3 Camera::getCameraPosition()
 	return position;
 }
 
+void Camera::setCameraPosition(glm::vec3 pos)
+{
+	position =pos;
+}
 
 glm::vec3 Camera::getCameraDirection()
 {
 	return glm::normalize(front);
+}
+
+void Camera::setCameraDirection(glm::vec3 dic)
+{
+	front = dic;
 }
 
 void Camera::update()
