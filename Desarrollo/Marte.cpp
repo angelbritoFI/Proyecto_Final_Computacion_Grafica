@@ -1952,7 +1952,7 @@ int main() {
 			}
 		}
 
-		// Stormtrooper (cuerpo)
+		// Stormtrooper 1 (cuerpo)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(posXclon, posYclon, posZclon));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
@@ -1990,6 +1990,195 @@ int main() {
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		PiernaCD_M.RenderModel();
 
+		// Stormtrooper 2 (cuerpo)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posXclon - 15.0f, posYclon, posZclon));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, rotacionS1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionS2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoC_M.RenderModel();
+
+		// Stormtrooper (brazo izquierdo)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionIzquierda + rotacionBrazoI) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCI_M.RenderModel();
+
+		// Stormtrooper (brazo derecho)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionDerecha + rotacionBrazoD) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCD_M.RenderModel();
+
+		// Stormtrooper (pierna izquierda)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionDerecha  * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCI_M.RenderModel();
+
+		// Stormtrooper (pierna derecha)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionIzquierda * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCD_M.RenderModel();
+
+		// Stormtrooper 3 (cuerpo)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posXclon - 30.0f, posYclon, posZclon));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, rotacionS1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionS2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoC_M.RenderModel();
+
+		// Stormtrooper (brazo izquierdo)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionIzquierda + rotacionBrazoI) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCI_M.RenderModel();
+
+		// Stormtrooper (brazo derecho)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionDerecha + rotacionBrazoD) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCD_M.RenderModel();
+
+		// Stormtrooper (pierna izquierda)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionDerecha  * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCI_M.RenderModel();
+
+		// Stormtrooper (pierna derecha)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionIzquierda * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCD_M.RenderModel();
+
+		// Stormtrooper 4 atrás (cuerpo)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posXclon, posYclon, posZclon - 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, rotacionS1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionS2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoC_M.RenderModel();
+
+		// Stormtrooper (brazo izquierdo)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionIzquierda + rotacionBrazoI) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCI_M.RenderModel();
+
+		// Stormtrooper (brazo derecho)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionDerecha + rotacionBrazoD) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCD_M.RenderModel();
+
+		// Stormtrooper (pierna izquierda)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionDerecha  * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCI_M.RenderModel();
+
+		// Stormtrooper (pierna derecha)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionIzquierda * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCD_M.RenderModel();
+
+		// Stormtrooper 5 (cuerpo)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posXclon - 15.0f, posYclon, posZclon - 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, rotacionS1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionS2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoC_M.RenderModel();
+
+		// Stormtrooper (brazo izquierdo)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionIzquierda + rotacionBrazoI) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCI_M.RenderModel();
+
+		// Stormtrooper (brazo derecho)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionDerecha + rotacionBrazoD) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCD_M.RenderModel();
+
+		// Stormtrooper (pierna izquierda)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionDerecha  * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCI_M.RenderModel();
+
+		// Stormtrooper (pierna derecha)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionIzquierda * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCD_M.RenderModel();
+
+		// Stormtrooper 6 (cuerpo)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posXclon - 30.0f, posYclon, posZclon - 20.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, rotacionS1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionS2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoC_M.RenderModel();
+
+		// Stormtrooper (brazo izquierdo)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionIzquierda + rotacionBrazoI) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCI_M.RenderModel();
+
+		// Stormtrooper (brazo derecho)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionDerecha + rotacionBrazoD) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCD_M.RenderModel();
+
+		// Stormtrooper (pierna izquierda)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionDerecha  * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCI_M.RenderModel();
+
+		// Stormtrooper (pierna derecha)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionIzquierda * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCD_M.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-70.0f, -1.0f, 40.0f));
