@@ -64,7 +64,14 @@ Model PieI_M;
 
 Model Eva_M;
 Model FinnJake_M;
-Model Clon_M;
+Model ClonO_M;
+
+//Stormtroppers
+Model CuerpoC_M;
+Model BrazoCI_M;
+Model BrazoCD_M;
+Model PiernaCI_M;
+Model PiernaCD_M;
 
 //Naves
 Model InterceptorJedi_M;
@@ -83,8 +90,6 @@ Model Estrellas_M;
 //skybox dia noche
 Skybox skybox;
 Skybox skyboxNight;
-
-
 
 //materiales objeto interactúe con la luz
 Material Material_brillante; 
@@ -572,8 +577,23 @@ int main() {
 	Eva_M = Model();
 	Eva_M.LoadModel("Models/EVA.obj");
 
-	Clon_M = Model();
-	Clon_M.LoadModel("Models/Stormtrooper.obj");
+	ClonO_M = Model();
+	ClonO_M.LoadModel("Models/Stormtrooper.obj");
+
+	CuerpoC_M = Model();
+	CuerpoC_M.LoadModel("Models/Stormtrooper-Cuerpo.fbx");
+
+	BrazoCI_M = Model();
+	BrazoCI_M.LoadModel("Models/Stormtrooper-Brazo-Izquierdo.fbx");
+
+	BrazoCD_M = Model();
+	BrazoCD_M.LoadModel("Models/Stormtrooper-Brazo-Derecho.fbx");
+
+	PiernaCI_M = Model();
+	PiernaCI_M.LoadModel("Models/Stormtrooper-Pierna-Izquierda.fbx");
+
+	PiernaCD_M = Model();
+	PiernaCD_M.LoadModel("Models/Stormtrooper-Pierna-Derecha.fbx");
 
 	InterceptorJedi_M = Model();
 	InterceptorJedi_M.LoadModel("Models/InterceptorJedi.fbx");
@@ -1270,6 +1290,25 @@ int main() {
 	bool flag = true;
 	int giro=0;
 
+	// Stormtrooper
+	GLfloat rotacionDerecha = 0.0f;
+	GLfloat rotacionIzquierda = 0.0f;
+	GLfloat rotacionBrazoD = 0.0f;
+	GLfloat rotacionBrazoI = 0.0f;
+	GLfloat rotacionS1 = 0.0f;
+	GLfloat rotacionS2 = 0.0f;
+	float posXclon = -100.0f;
+	float posZclon = -80.0f;
+	float posYclon = 12.0;
+	bool iniciaR = true;
+	bool regresaR = false;
+	bool avanzaS = true;
+	bool vueltaS = false;
+	bool regresa = false;
+	bool vuelveOrigen = false;
+	bool terminaS = false;
+	bool subeBrazos = false;
+	bool reproduceDV = true;
 
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose()) {
@@ -1712,11 +1751,11 @@ int main() {
 		//Speeder Bike
 		model = glm::mat4(1.0);
 		if (posYspeeder > 0.0f && adelanteY == 0/*posYspeeder > -10.0f && adelanteY == 1*/) {
-			model = glm::translate(model, glm::vec3(-70.0f, -5.0f + posYspeeder, -60.0f + posZspeeder));
+			model = glm::translate(model, glm::vec3(-40.0f, -5.0f + posYspeeder, -60.0f + posZspeeder));
 			model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (posYspeeder < 20.0f && adelanteY == 1 || posYspeeder == 0.0f/*posYspeeder < 20.0f && adelanteY == 0*/) {
-			model = glm::translate(model, glm::vec3(-70.0f, -5.0f + posYspeeder, -60.0f + posZspeeder));
+			model = glm::translate(model, glm::vec3(-40.0f, -5.0f + posYspeeder, -60.0f + posZspeeder));
 			//model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
@@ -1757,10 +1796,200 @@ int main() {
 
 		// Stormtrooper
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-60.0f, -1.0f, -40.0f));
+		model = glm::translate(model, glm::vec3(-50.0f, -1.0f, -40.0f));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Clon_M.RenderModel();
+		ClonO_M.RenderModel();
+
+		// Stormtrooper
+		if (avanzaS) {
+			if (iniciaR) {
+				if (rotacionDerecha > -30.0f) {
+					rotacionDerecha -= 0.02f * deltaTime;
+					rotacionIzquierda += 0.02f * deltaTime;
+				}
+				else {
+					regresaR = true;
+					iniciaR = false;
+				}
+			}
+			if (regresaR) {
+				if (rotacionDerecha < 30.0f) {
+					rotacionDerecha += 0.02f * deltaTime;
+					rotacionIzquierda -= 0.02f * deltaTime;
+				}
+				else {
+					iniciaR = true;
+					regresaR = false;
+				}
+			}
+			if (posZclon < -25.0f) {
+				posZclon += 0.01f * deltaTime;
+			}
+			else {
+				vueltaS = true;
+			}
+		}
+
+		if (vueltaS) {
+			avanzaS = false;
+			if (iniciaR) {
+				if (rotacionDerecha > -30.0f) {
+					rotacionDerecha -= 0.02f * deltaTime;
+					rotacionIzquierda += 0.02f * deltaTime;
+				}
+				else {
+					regresaR = true;
+					iniciaR = false;
+				}
+			}
+			if (regresaR) {
+				if (rotacionDerecha < 30.0f) {
+					rotacionDerecha += 0.02f * deltaTime;
+					rotacionIzquierda -= 0.02f * deltaTime;
+				}
+				else {
+					iniciaR = true;
+					regresaR = false;
+				}
+			}
+			if (rotacionS1 > -180.0f) {
+				rotacionS1 -= 0.2f *deltaTime;
+			}
+			else {
+				regresa = true;
+			}
+		}
+
+		if (regresa) {
+			vueltaS = false;
+			if (iniciaR) {
+				if (rotacionDerecha > -30.0f) {
+					rotacionDerecha -= 0.02f * deltaTime;
+					rotacionIzquierda += 0.02f * deltaTime;
+				}
+				else {
+					regresaR = true;
+					iniciaR = false;
+				}
+			}
+			if (regresaR) {
+				if (rotacionDerecha < 30.0f) {
+					rotacionDerecha += 0.02f * deltaTime;
+					rotacionIzquierda -= 0.02f * deltaTime;
+				}
+				else {
+					iniciaR = true;
+					regresaR = false;
+				}
+			}
+			if (posZclon > -80.0f) {
+				posZclon -= 0.01f * deltaTime;
+			}
+			else {
+				vuelveOrigen = true;
+			}
+		}
+
+		if (vuelveOrigen) {
+			regresa = false;
+			if (reproduceDV) {
+				sonido->play2D("media/darth_vader.mp3", false); //Efecto de sonido
+			}
+			reproduceDV = false;
+			if (iniciaR) {
+				if (rotacionDerecha > -30.0f) {
+					rotacionDerecha -= 0.02f * deltaTime;
+					rotacionIzquierda += 0.02f * deltaTime;
+				}
+				else {
+					regresaR = true;
+					iniciaR = false;
+				}
+			}
+			if (regresaR) {
+				if (rotacionDerecha < 30.0f) {
+					rotacionDerecha += 0.02f * deltaTime;
+					rotacionIzquierda -= 0.02f * deltaTime;
+				}
+				else {
+					iniciaR = true;
+					regresaR = false;
+				}
+			}
+			if (rotacionS1 < 0.0f) {
+				rotacionS1 += 0.2f *deltaTime;
+				rotacionS2 -= 0.4f * deltaTime;
+			}
+			else {
+				subeBrazos = true;
+			}
+		}
+
+		if (subeBrazos) {
+			vuelveOrigen = false;
+			if (rotacionBrazoD > -180.0f) {
+				rotacionBrazoD -= 0.55f * deltaTime;
+				rotacionBrazoI -= 0.5f * deltaTime;
+			}
+			else {
+				terminaS = true;
+			}
+		}
+
+		if (terminaS) {
+			subeBrazos = false;
+			if (rotacionBrazoD < 0.0f) {
+				rotacionBrazoD += 0.55f * deltaTime;
+				rotacionBrazoI += 0.5f * deltaTime;
+			}
+			else { //Regresar a valores iniciales
+				terminaS = false;
+				rotacionBrazoD = 0.0f;
+				rotacionBrazoI = 0.0f;
+				avanzaS = true;
+				reproduceDV = true;
+			}
+		}
+
+		// Stormtrooper (cuerpo)
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(posXclon, posYclon, posZclon));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, rotacionS1 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotacionS2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		CuerpoC_M.RenderModel();
+
+		// Stormtrooper (brazo izquierdo)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionIzquierda + rotacionBrazoI) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCI_M.RenderModel();
+
+		// Stormtrooper (brazo derecho)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.05f, 0.21f, -0.03f));
+		model = glm::rotate(model, (rotacionDerecha + rotacionBrazoD) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BrazoCD_M.RenderModel();
+
+		// Stormtrooper (pierna izquierda)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionDerecha  * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCI_M.RenderModel();
+
+		// Stormtrooper (pierna derecha)
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, rotacionIzquierda * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PiernaCD_M.RenderModel();
+
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-70.0f, -1.0f, 40.0f));
